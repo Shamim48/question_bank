@@ -6,9 +6,11 @@
             <p class="text-sm text-gray-400">Record marks given by multiple judges in offline events</p>
         </div>
         <div class="flex items-center gap-4">
-            <button wire:click="openForm"
-                class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30">
-                <i data-lucide="plus-circle" class="w-5 h-5"></i> Add Mark
+            <button wire:click="openForm" wire:loading.attr="disabled"
+                class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50">
+                <i data-lucide="plus-circle" class="w-5 h-5" wire:loading.remove wire:target="openForm"></i>
+                <div wire:loading wire:target="openForm" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Add Mark
             </button>
         </div>
     </div>
@@ -98,8 +100,11 @@
                         <button wire:click="openForm({{ $mark->id }})" class="w-10 h-10 glass rounded-xl flex items-center justify-center text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all" title="Edit">
                             <i data-lucide="edit-3" class="w-5 h-5"></i>
                         </button>
-                        <button wire:click="delete({{ $mark->id }})" wire:confirm="Delete this mark?" class="w-10 h-10 glass rounded-xl flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all" title="Delete">
-                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                        <button wire:click="delete({{ $mark->id }})" wire:confirm="Delete this mark?" 
+                                wire:loading.attr="disabled" wire:target="delete({{ $mark->id }})"
+                                class="w-10 h-10 glass rounded-xl flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all disabled:opacity-50" title="Delete">
+                            <i data-lucide="trash-2" class="w-5 h-5" wire:loading.remove wire:target="delete({{ $mark->id }})"></i>
+                            <div wire:loading wire:target="delete({{ $mark->id }})" class="w-5 h-5 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin"></div>
                         </button>
                     </div>
                 </div>
@@ -216,8 +221,10 @@
                     <!-- Actions -->
                     <div class="flex gap-4 pt-4">
                         <button type="button" wire:click="closeForm" class="flex-1 py-4 bg-gray-100/50 rounded-2xl text-sm font-bold text-gray-500 hover:text-gray-900 transition-all border border-gray-200">Cancel</button>
-                        <button type="submit" class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-sm font-bold transition-all shadow-xl shadow-indigo-600/30">
-                            {{ $editingId ? 'Update Marks' : 'Save Marks' }}
+                        <button type="submit" class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-sm font-bold transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 disabled:opacity-70" wire:loading.attr="disabled">
+                            <i data-lucide="check" class="w-5 h-5" wire:loading.remove wire:target="save"></i>
+                            <div wire:loading wire:target="save" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span>{{ $editingId ? 'Update Marks' : 'Save Marks' }}</span>
                         </button>
                     </div>
                 </form>

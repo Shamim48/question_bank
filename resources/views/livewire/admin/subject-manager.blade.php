@@ -5,9 +5,11 @@
             <h2 class="text-3xl font-display font-bold text-white mb-2">Subject Governance</h2>
             <p class="text-sm text-gray-400">Map your curriculum to competitive rounds</p>
         </div>
-        <button wire:click="openForm"
-            class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30">
-            <i data-lucide="plus-circle" class="w-5 h-5"></i> New Subject
+        <button wire:click="openForm" wire:loading.attr="disabled"
+            class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50">
+            <i data-lucide="plus-circle" class="w-5 h-5" wire:loading.remove wire:target="openForm"></i>
+            <div wire:loading wire:target="openForm" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            New Subject
         </button>
     </div>
 
@@ -64,8 +66,10 @@
                                     <i data-lucide="edit-3" class="w-4 h-4"></i>
                                 </button>
                                 <button wire:click="delete({{ $subject->id }})" wire:confirm="Delete this subject?"
-                                    class="w-9 h-9 glass rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    wire:loading.attr="disabled" wire:target="delete({{ $subject->id }})"
+                                    class="w-9 h-9 glass rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all disabled:opacity-50">
+                                    <i data-lucide="trash-2" class="w-4 h-4" wire:loading.remove wire:target="delete({{ $subject->id }})"></i>
+                                    <div wire:loading wire:target="delete({{ $subject->id }})" class="w-4 h-4 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin"></div>
                                 </button>
                             </div>
                         </td>
@@ -131,9 +135,11 @@
                     <div class="flex gap-4 pt-4">
                         <button type="button" wire:click="closeForm"
                             class="flex-1 py-4 bg-gray-100/50 rounded-2xl text-xs font-bold text-gray-500 hover:text-gray-900 transition-all border border-gray-200">Cancel</button>
-                        <button type="submit"
-                            class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-xs font-bold transition-all shadow-xl shadow-indigo-600/30">
-                            {{ $editingId ? 'Update' : 'Submit' }}
+                        <button type="submit" wire:loading.attr="disabled"
+                            class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-xs font-bold transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 disabled:opacity-70">
+                            <i data-lucide="check" class="w-4 h-4" wire:loading.remove wire:target="save"></i>
+                            <div wire:loading wire:target="save" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span>{{ $editingId ? 'Update' : 'Submit' }}</span>
                         </button>
                     </div>
                 </form>

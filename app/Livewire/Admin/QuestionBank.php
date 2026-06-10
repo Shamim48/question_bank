@@ -34,14 +34,34 @@ class QuestionBank extends Component
     public $filterRound = '';
     public $selectedRounds = [];
 
-    protected $rules = [
-        'subject_id' => 'required|exists:subjects,id',
-        'group_id' => 'required|exists:groups,id',
-        'type' => 'required|in:text,image,audio,video',
-        'content' => 'required|string',
-        'time_limit' => 'required|integer|min:5',
-        'points' => 'required|integer|min:1',
-        'options.*.text' => 'required|string',
+    protected function rules()
+    {
+        return [
+            'subject_id' => 'required|exists:subjects,id',
+            'group_id' => 'required|exists:groups,id',
+            'type' => 'required|in:text,image,audio,video',
+            'content' => 'required|string|min:5',
+            'time_limit' => 'required|integer|min:5|max:3600',
+            'points' => 'required|integer|min:1|max:100',
+            'selectedRounds' => 'required|array|min:1',
+            'correct_option' => 'required|integer|min:1|max:4',
+            'options.*.text' => 'required|string|distinct',
+            'media_url' => $this->type !== 'text' ? 'nullable|url' : 'nullable',
+            'media_file' => $this->type === 'image' ? 'nullable|image|max:5120' : ($this->type !== 'text' ? 'nullable|file|max:20480' : 'nullable'),
+        ];
+    }
+
+    protected $messages = [
+        'subject_id.required' => 'Please select a subject domain.',
+        'group_id.required' => 'A group policy must be selected.',
+        'selectedRounds.required' => 'You must include at least one round.',
+        'content.required' => 'The question content cannot be empty.',
+        'content.min' => 'Question content is too short (min 5 chars).',
+        'options.*.text.required' => 'All options must have text.',
+        'options.*.text.distinct' => 'Option texts must be unique.',
+        'media_url.url' => 'Please provide a valid URL for media.',
+        'media_file.image' => 'The uploaded file must be an image.',
+        'media_file.max' => 'The file size is too large (max 5MB for images, 20MB for others).',
     ];
 
     public function mount()

@@ -6,9 +6,11 @@
             <p class="text-sm text-gray-400">Manage and organize your MCQ ecosystem</p>
         </div>
         <div class="flex items-center gap-4">
-            <button wire:click="openForm"
-                class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30">
-                <i data-lucide="plus-circle" class="w-5 h-5"></i> New Question
+            <button wire:click="openForm" wire:loading.attr="disabled"
+                class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50">
+                <i data-lucide="plus-circle" class="w-5 h-5" wire:loading.remove wire:target="openForm"></i>
+                <div wire:loading wire:target="openForm" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                New Question
             </button>
         </div>
     </div>
@@ -137,8 +139,11 @@
                         <button wire:click="openForm({{ $question->id }})" class="w-10 h-10 glass rounded-xl flex items-center justify-center text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all" title="Edit">
                             <i data-lucide="edit-3" class="w-5 h-5"></i>
                         </button>
-                        <button wire:click="delete({{ $question->id }})" wire:confirm="Delete this question?" class="w-10 h-10 glass rounded-xl flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all" title="Delete">
-                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                        <button wire:click="delete({{ $question->id }})" wire:confirm="Delete this question?" 
+                                wire:loading.attr="disabled" wire:target="delete({{ $question->id }})"
+                                class="w-10 h-10 glass rounded-xl flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all disabled:opacity-50" title="Delete">
+                            <i data-lucide="trash-2" class="w-5 h-5" wire:loading.remove wire:target="delete({{ $question->id }})"></i>
+                            <div wire:loading wire:target="delete({{ $question->id }})" class="w-5 h-5 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin"></div>
                         </button>
                     </div>
                 </div>
@@ -178,33 +183,34 @@
                     <!-- Basic Info -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2">
                         <div class="space-y-2 col-span-1 md:col-span-2">
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Included Rounds</label>
+                            <label class="text-xs font-bold {{ $errors->has('selectedRounds') ? 'text-red-500' : 'text-gray-400' }} uppercase tracking-widest ml-1">Included Rounds</label>
                             <div class="flex flex-wrap gap-2">
                                 @foreach($rounds as $r)
-                                    <label class="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl cursor-pointer hover:bg-white/10 transition-colors">
+                                    <label class="flex items-center gap-2 px-4 py-2 {{ $errors->has('selectedRounds') ? 'border-red-500/50 bg-red-500/5' : 'bg-white/5 border-white/10' }} border rounded-xl cursor-pointer hover:bg-white/10 transition-colors">
                                         <input type="checkbox" wire:model="selectedRounds" value="{{ $r->id }}" class="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                                         <span class="text-sm text-gray-900 font-medium">{{ $r->name }}</span>
                                     </label>
                                 @endforeach
                             </div>
+                            @error('selectedRounds') <span class="text-red-400 text-[10px] font-bold uppercase tracking-wider ml-1 mt-1 block">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pb-2">
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Subject Context</label>
-                            <select wire:model="subject_id" class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50">
+                            <label class="text-xs font-bold {{ $errors->has('subject_id') ? 'text-red-500' : 'text-gray-400' }} uppercase tracking-widest ml-1">Subject Context</label>
+                            <select wire:model="subject_id" class="w-full bg-white/5 {{ $errors->has('subject_id') ? 'border-red-500' : 'border-white/10' }} rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50">
                                 <option value="">Select Domain</option>
                                 @foreach($subjects as $s)<option value="{{ $s->id }}">{{ $s->name }} ({{ $s->round->name }})</option>@endforeach
                             </select>
-                            @error('subject_id') <span class="text-red-400 text-xs">{{ $message }}</span> @enderror
+                            @error('subject_id') <span class="text-red-400 text-[10px] font-bold ml-1">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Group Access</label>
-                            <select wire:model="group_id" class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50">
+                            <label class="text-xs font-bold {{ $errors->has('group_id') ? 'text-red-500' : 'text-gray-400' }} uppercase tracking-widest ml-1">Group Access</label>
+                            <select wire:model="group_id" class="w-full bg-white/5 {{ $errors->has('group_id') ? 'border-red-500' : 'border-white/10' }} rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50">
                                 <option value="">Select Group</option>
                                 @foreach($groups as $g)<option value="{{ $g->id }}">{{ $g->name }}</option>@endforeach
                             </select>
-                            @error('group_id') <span class="text-red-400 text-xs">{{ $message }}</span> @enderror
+                            @error('group_id') <span class="text-red-400 text-[10px] font-bold ml-1">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Media Format</label>
@@ -219,29 +225,32 @@
 
                     <!-- Content -->
                     <div class="space-y-2">
-                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Question Blueprint</label>
-                        <textarea wire:model="content" rows="4" class="w-full bg-white/5 border-white/10 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white placeholder-gray-600" placeholder="Type your intellectual challenge here..."></textarea>
-                        @error('content') <span class="text-red-400 text-xs">{{ $message }}</span> @enderror
+                        <label class="text-xs font-bold {{ $errors->has('content') ? 'text-red-500' : 'text-gray-400' }} uppercase tracking-widest ml-1">Question Blueprint</label>
+                        <textarea wire:model="content" rows="4" class="w-full bg-white/5 {{ $errors->has('content') ? 'border-red-500' : 'border-white/10' }} rounded-2xl px-6 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white placeholder-gray-600" placeholder="Type your intellectual challenge here..."></textarea>
+                        @error('content') <span class="text-red-400 text-[10px] font-bold ml-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Media Uploads -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 glass-card rounded-3xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 glass-card rounded-3xl {{ ($errors->has('media_url') || $errors->has('media_file')) ? 'border-red-500/30' : '' }}">
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">External Link</label>
+                            <label class="text-xs font-bold {{ $errors->has('media_url') ? 'text-red-500' : 'text-gray-400' }} uppercase tracking-widest ml-1">External Link</label>
                             <div class="relative">
                                 <i data-lucide="link" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600"></i>
-                                <input type="text" wire:model="media_url" class="w-full bg-white/5 border-white/10 rounded-2xl pl-12 pr-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50" placeholder="https://youtube.com/...">
+                                <input type="text" wire:model="media_url" class="w-full bg-white/5 {{ $errors->has('media_url') ? 'border-red-500' : 'border-white/10' }} rounded-2xl pl-12 pr-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50" placeholder="https://youtube.com/...">
                             </div>
+                            @error('media_url') <span class="text-red-400 text-[10px] font-bold ml-1">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Direct Upload</label>
+                            <label class="text-xs font-bold {{ $errors->has('media_file') ? 'text-red-500' : 'text-gray-400' }} uppercase tracking-widest ml-1">Direct Upload</label>
                             <div class="relative group">
                                 <input type="file" wire:model="media_file" class="hidden" id="file_upload">
-                                <label for="file_upload" class="flex items-center justify-center gap-3 w-full h-12 glass border-dashed border-white/20 rounded-2xl cursor-pointer hover:bg-white/5 transition-all">
+                                <label for="file_upload" class="flex items-center justify-center gap-3 w-full h-12 glass {{ $errors->has('media_file') ? 'border-red-500 border-solid bg-red-500/5' : 'border-dashed border-white/20' }} rounded-2xl cursor-pointer hover:bg-white/5 transition-all">
                                     <i data-lucide="cloud-upload" class="w-5 h-5 text-indigo-400 mt-0.5"></i>
                                     <span class="text-xs font-semibold">Select Assets</span>
                                 </label>
                             </div>
+                            <div wire:loading wire:target="media_file" class="text-indigo-400 text-[10px] font-medium italic mt-1">Uploading...</div>
+                            @error('media_file') <span class="text-red-400 text-[10px] font-bold ml-1">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
@@ -259,25 +268,28 @@
 
                     <!-- Options Grid -->
                     <div class="space-y-4">
-                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">MCQ Options Configuration</label>
+                        <label class="text-xs font-bold {{ $errors->has('options.*.text') || $errors->has('correct_option') ? 'text-red-500' : 'text-gray-400' }} uppercase tracking-widest ml-1">MCQ Options Configuration</label>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @foreach($options as $index => $option)
                                 <div class="relative group">
                                     <div class="absolute inset-y-0 left-4 flex items-center">
                                         <input type="radio" wire:model="correct_option" value="{{ $index + 1 }}" class="w-5 h-5 bg-white/5 border-white/20 text-indigo-600 focus:ring-0">
                                     </div>
-                                    <input type="text" wire:model="options.{{ $index }}.text" class="w-full bg-white/5 border-white/10 rounded-2xl pl-14 pr-4 py-4 focus:ring-2 focus:ring-emerald-500/50 transition-all focus:bg-emerald-500/5" placeholder="Option {{ chr(65 + $index) }}">
+                                    <input type="text" wire:model="options.{{ $index }}.text" class="w-full bg-white/5 {{ $errors->has('options.'.$index.'.text') ? 'border-red-500 bg-red-500/5' : 'border-white/10' }} rounded-2xl pl-14 pr-4 py-4 focus:ring-2 focus:ring-emerald-500/50 transition-all focus:bg-emerald-500/5" placeholder="Option {{ chr(65 + $index) }}">
+                                    @error('options.'.$index.'.text') <span class="absolute -bottom-5 left-1 text-red-400 text-[10px] font-bold uppercase">{{ $message }}</span> @enderror
                                 </div>
                             @endforeach
                         </div>
-                        @error('options.*.text') <span class="text-red-400 text-xs">{{ $message }}</span> @enderror
+                        @error('correct_option') <span class="text-red-400 text-xs mt-2 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Actions -->
                     <div class="flex gap-4 pt-8">
                         <button type="button" wire:click="closeForm" class="flex-1 py-4 bg-gray-100/50 rounded-2xl text-sm font-bold text-gray-500 hover:text-gray-900 transition-all border border-gray-200">Discard Changes</button>
-                        <button type="submit" class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-sm font-bold transition-all shadow-xl shadow-indigo-600/30">
-                            {{ $editingId ? 'Update' : 'Submit' }}
+                        <button type="submit" class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-sm font-bold transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 disabled:opacity-70" wire:loading.attr="disabled">
+                            <i data-lucide="send" class="w-5 h-5" wire:loading.remove wire:target="save"></i>
+                            <div wire:loading wire:target="save" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span>{{ $editingId ? 'Update' : 'Submit' }}</span>
                         </button>
                     </div>
                 </form>

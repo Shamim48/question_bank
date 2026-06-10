@@ -64,9 +64,11 @@
                             @error('group_id') <span class="text-red-400 text-[10px]">{{ $message }}</span> @enderror
                         </div>
 
-                        <button type="submit"
-                            class="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-all shadow-xl shadow-indigo-600/20">
-                            Finalize & Issue
+                        <button type="submit" wire:loading.attr="disabled"
+                            class="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-all shadow-xl shadow-indigo-600/20 disabled:opacity-70 flex items-center justify-center gap-3">
+                            <i data-lucide="check-circle" class="w-4 h-4" wire:loading.remove wire:target="generate"></i>
+                            <div wire:loading wire:target="generate" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span>Finalize & Issue</span>
                         </button>
                     </form>
                 </div>
@@ -123,8 +125,10 @@
                                     </a>
                                     <button wire:click="delete({{ $cert->id }})"
                                         wire:confirm="Revoke this certificate permanently?"
-                                        class="w-10 h-10 glass flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all">
-                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        wire:loading.attr="disabled" wire:target="delete({{ $cert->id }})"
+                                        class="w-10 h-10 glass flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all disabled:opacity-50">
+                                        <i data-lucide="trash-2" class="w-4 h-4" wire:loading.remove wire:target="delete({{ $cert->id }})"></i>
+                                        <div wire:loading wire:target="delete({{ $cert->id }})" class="w-4 h-4 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin"></div>
                                     </button>
                                 </div>
                             </div>

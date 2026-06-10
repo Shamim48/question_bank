@@ -6,9 +6,11 @@
             <p class="text-sm text-gray-400">Manage learning materials assigned by group and round</p>
         </div>
         <div class="flex items-center gap-4">
-            <button wire:click="openForm"
-                class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30">
-                <i data-lucide="upload-cloud" class="w-5 h-5"></i> Upload PDF Book
+            <button wire:click="openForm" wire:loading.attr="disabled"
+                class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50">
+                <i data-lucide="upload-cloud" class="w-5 h-5" wire:loading.remove wire:target="openForm"></i>
+                <div wire:loading wire:target="openForm" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Upload PDF Book
             </button>
         </div>
     </div>
@@ -78,8 +80,11 @@
                     <button wire:click="openForm({{ $book->id }})" class="w-10 h-10 bg-white/5 hover:bg-white/10 text-indigo-400 rounded-xl flex items-center justify-center transition-all">
                         <i data-lucide="edit-3" class="w-4 h-4"></i>
                     </button>
-                    <button wire:click="delete({{ $book->id }})" wire:confirm="Are you sure you want to delete this book?" class="w-10 h-10 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-xl flex items-center justify-center transition-all">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    <button wire:click="delete({{ $book->id }})" wire:confirm="Are you sure you want to delete this book?" 
+                            wire:loading.attr="disabled" wire:target="delete({{ $book->id }})"
+                            class="w-10 h-10 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-xl flex items-center justify-center transition-all disabled:opacity-50">
+                        <i data-lucide="trash-2" class="w-4 h-4" wire:loading.remove wire:target="delete({{ $book->id }})"></i>
+                        <div wire:loading wire:target="delete({{ $book->id }})" class="w-4 h-4 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin"></div>
                     </button>
                 </div>
             </div>
@@ -160,9 +165,11 @@
                     <!-- Actions -->
                     <div class="flex gap-4 pt-6">
                         <button type="button" wire:click="closeForm" class="flex-1 py-4 bg-gray-100/50 rounded-2xl text-sm font-bold text-gray-500 hover:text-gray-900 transition-all border border-gray-200">Cancel</button>
-                        <button type="submit" class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-sm font-bold transition-all shadow-xl shadow-indigo-600/30" wire:loading.attr="disabled" wire:target="file_path">
-                            <span wire:loading.remove wire:target="file_path">{{ $editingId ? 'Save Changes' : 'Upload Book' }}</span>
-                            <span wire:loading wire:target="file_path">Wait for upload...</span>
+                        <button type="submit" class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-sm font-bold transition-all shadow-xl shadow-indigo-600/30 disabled:opacity-70 flex items-center justify-center gap-2" 
+                                wire:loading.attr="disabled">
+                            <i data-lucide="check" class="w-5 h-5" wire:loading.remove wire:target="save"></i>
+                            <div wire:loading wire:target="save" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span>{{ $editingId ? 'Save Changes' : 'Upload Book' }}</span>
                         </button>
                     </div>
                 </form>

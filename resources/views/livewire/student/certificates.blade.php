@@ -44,10 +44,12 @@
                         </div>
                     </div>
 
-                    <div class="relative z-10 pt-6 border-t border-white/5">
-                        <a href="{{ route('certificate.download', $cert) }}"
-                            class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] transition-all shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-3 active:scale-95">
-                            <i data-lucide="download" class="w-4 h-4"></i> Secure PDF Export
+                    <div class="relative z-10 pt-6 border-t border-white/5" x-data="{ downloading: false }" @clear-manual-loaders.window="downloading = false">
+                        <a href="{{ route('certificate.download', $cert) }}" @click="downloading = true; setTimeout(() => downloading = false, 6000)"
+                            class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] transition-all shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50">
+                            <i data-lucide="download" class="w-4 h-4" x-show="!downloading"></i>
+                            <div x-show="downloading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span x-text="downloading ? 'Processing...' : 'Secure PDF Export'"></span>
                         </a>
                     </div>
 

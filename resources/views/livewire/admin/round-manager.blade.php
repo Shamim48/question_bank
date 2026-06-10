@@ -5,9 +5,11 @@
             <h2 class="text-3xl font-display font-bold text-white mb-2">Competition Rounds</h2>
             <p class="text-sm text-gray-400">Orchestrate the progression of your competitive events</p>
         </div>
-        <button wire:click="openForm"
-            class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30">
-            <i data-lucide="plus-circle" class="w-5 h-5"></i> New Round
+        <button wire:click="openForm" wire:loading.attr="disabled"
+            class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50">
+            <i data-lucide="plus-circle" class="w-5 h-5" wire:loading.remove wire:target="openForm"></i>
+            <div wire:loading wire:target="openForm" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            New Round
         </button>
     </div>
 
@@ -122,10 +124,12 @@
                                     title="Edit Configuration">
                                     <i data-lucide="pen" class="w-4 h-4"></i>
                                 </button>
-                                <button wire:click="delete({{ $round->id }})" wire:confirm="Eliminate this round?"
-                                    class="p-2 hover:bg-white/5 rounded-lg text-red-500 transition-colors"
+                                 <button wire:click="delete({{ $round->id }})" wire:confirm="Eliminate this round?"
+                                    wire:loading.attr="disabled" wire:target="delete({{ $round->id }})"
+                                    class="p-2 hover:bg-white/5 rounded-lg text-red-500 transition-colors disabled:opacity-50"
                                     title="Remove Entry">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    <i data-lucide="trash-2" class="w-4 h-4" wire:loading.remove wire:target="delete({{ $round->id }})"></i>
+                                    <div wire:loading wire:target="delete({{ $round->id }})" class="w-4 h-4 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin"></div>
                                 </button>
                             </div>
                         </td>
@@ -226,9 +230,11 @@
                     <div class="flex gap-4 pt-6">
                         <button type="button" wire:click="closeForm"
                             class="flex-1 py-4 bg-gray-100/50 rounded-2xl text-xs font-bold text-gray-500 hover:text-gray-900 transition-all border border-gray-200">Discard</button>
-                        <button type="submit"
-                            class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-xs font-bold transition-all shadow-xl shadow-indigo-600/30">
-                            {{ $editingId ? 'Update' : 'Submit' }}
+                        <button type="submit" wire:loading.attr="disabled"
+                            class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-xs font-bold transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4" wire:loading.remove wire:target="save"></i>
+                            <div wire:loading wire:target="save" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span>{{ $editingId ? 'Update' : 'Submit' }}</span>
                         </button>
                     </div>
                 </form>

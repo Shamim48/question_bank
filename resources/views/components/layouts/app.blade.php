@@ -145,13 +145,30 @@
 <body class="font-sans antialiased text-gray-900 min-h-screen overflow-x-hidden" x-data="{ 
         sidebarOpen: true, 
         mobileMenuOpen: false,
-        sidebarCollapsed: localStorage.getItem('sidebarCollapsed') === 'true'
-      }" x-init="$watch('sidebarCollapsed', val => localStorage.setItem('sidebarCollapsed', val))">
+        sidebarCollapsed: localStorage.getItem('sidebarCollapsed') === 'true',
+        isLoading: false
+      }" 
+      x-init="$watch('sidebarCollapsed', val => localStorage.setItem('sidebarCollapsed', val))"
+      @show-global-loader.window="isLoading = true"
+      @hide-global-loader.window="isLoading = false"
+      @clear-manual-loaders.window="isLoading = false">
+
+    <!-- Global Loading Indicator -->
+    <div x-show="isLoading" x-transition.opacity.duration.300ms class="fixed top-0 left-0 right-0 z-[100] h-1 bg-indigo-600/20" x-cloak>
+        <div class="h-full bg-indigo-600 shadow-[0_0_10px_rgba(79,70,229,0.8)]" style="width: 100%; animation: loading-bar 1.5s linear infinite;"></div>
+    </div>
+
+    <style>
+        @keyframes loading-bar {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
 
     <div class="flex min-h-screen relative">
         <!-- Sidebar Shell -->
         <aside :class="sidebarCollapsed ? 'w-20' : 'w-72'"
-            class="hidden lg:flex flex-col glass fixed inset-y-0 left-0 z-40 transition-all duration-500 ease-in-out border-r border-white/5 no-scrollbar">
+            class="hidden lg:flex flex-col glass fixed inset-y-0 left-0 z-40 transition-all duration-200 ease-in-out border-r border-white/5 no-scrollbar">
             <!-- Logo Area -->
             <div class="h-20 flex items-center px-6 border-b border-white/5 shrink-0 justify-between">
                 <div class="flex items-center gap-3 overflow-hidden" x-show="!sidebarCollapsed"
@@ -222,7 +239,7 @@
         </aside>
 
         <!-- Main Wrapper -->
-        <div class="flex-1 flex flex-col transition-all duration-500 ease-in-out"
+        <div class="flex-1 flex flex-col transition-all duration-200 ease-in-out"
             :class="sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72'">
 
             <!-- Top Header -->
@@ -364,7 +381,25 @@
             lucide.createIcons();
         });
 
+        // Clear manual loading states on Livewire download
+        window.addEventListener('livewire:download', () => {
+            window.dispatchEvent(new CustomEvent('hide-global-loader'));
+            window.dispatchEvent(new CustomEvent('clear-manual-loaders'));
+        });
+
         document.addEventListener('livewire:initialized', () => {
+            Livewire.hook('request', ({ uri, options, payload, respond, succeed, fail }) => {
+                // Show loader after small delay to avoid flickering on fast requests
+                window.loaderTimeout = setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent('show-global-loader'));
+                }, 150);
+            });
+
+            Livewire.hook('request.finished', () => {
+                clearTimeout(window.loaderTimeout);
+                window.dispatchEvent(new CustomEvent('hide-global-loader'));
+            });
+
             Livewire.hook('morph.updated', ({ el, component }) => {
                 lucide.createIcons();
             });

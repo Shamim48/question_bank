@@ -30,10 +30,12 @@
                     </span>
                 </div>
 
-                <div class="mt-auto pt-6 border-t border-white/5">
-                    <a href="{{ asset($book->file_path) }}" target="_blank" download
-                       class="w-full flex justify-center items-center gap-2 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30">
-                        <i data-lucide="downloadCloud" class="w-5 h-5"></i> Download PDF
+                <div class="mt-auto pt-6 border-t border-white/5" x-data="{ loading: false }" @clear-manual-loaders.window="loading = false">
+                    <a href="{{ asset($book->file_path) }}" target="_blank" download @click="loading = true; setTimeout(() => loading = false, 5000)"
+                       class="w-full flex justify-center items-center gap-2 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50">
+                        <i data-lucide="download-cloud" class="w-5 h-5" x-show="!loading"></i>
+                        <div x-show="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <span x-text="loading ? 'Starting...' : 'Download PDF'"></span>
                     </a>
                 </div>
             </div>
