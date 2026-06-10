@@ -81,7 +81,7 @@
     <!-- Questions Grid -->
     <div class="space-y-4">
         @forelse($questions as $question)
-            <div class="glass-card rounded-3xl p-6 lg:p-8 animate__animated animate__fadeInUp" style="animation-delay: {{ $loop->index * 0.05 }}s">
+            <div class="glass-card rounded-3xl p-6 lg:p-8 animate__animated animate__fadeInUp hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer" style="animation-delay: {{ $loop->index * 0.05 }}s">
                 <div class="flex flex-col lg:flex-row gap-8">
                     <!-- Badge & Content Section -->
                     <div class="flex-1">

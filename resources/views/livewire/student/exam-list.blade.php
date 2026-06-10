@@ -65,7 +65,7 @@
                             @if($completed)
                                 <div class="mt-4 pt-6 border-t border-white/5 flex items-center justify-between">
                                     <div class="flex flex-col">
-                                        <span class="text-[8px] font-bold text-gray-700 uppercase tracking-widest">Performance Score</span>
+                                        <span class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Performance Score</span>
                                         <span class="text-xl font-display font-black text-emerald-400">{{ number_format($completed->total_score ?? 0, 1) }}</span>
                                     </div>
                                     <div class="w-10 h-10 glass rounded-xl flex items-center justify-center text-gray-600">

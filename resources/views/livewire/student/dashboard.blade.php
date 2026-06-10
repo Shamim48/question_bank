@@ -48,7 +48,10 @@
                 </div>
                 <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Aggregate Score</span>
             </div>
-            <p class="text-4xl font-display font-black text-white">{{ number_format($totalScore, 1) }}</p>
+            <p class="text-4xl font-display font-black text-white">
+                <span wire:loading.remove>{{ number_format(floatval($totalScore ?? 0), 1) }}</span>
+                <span wire:loading class="inline-block w-36 h-10 bg-white/5 rounded-lg animate-pulse"></span>
+            </p>
             <p class="text-xs text-gray-500 mt-2">Cumulative performance metric</p>
         </div>
 
@@ -61,7 +64,9 @@
                 <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Achievements</span>
             </div>
             <p class="text-4xl font-display font-black text-white">
-                {{ $recentExams->where('status', 'completed')->count() }}</p>
+                <span wire:loading.remove>{{ $recentExams->where('status', 'completed')->count() }}</span>
+                <span wire:loading class="inline-block w-24 h-10 bg-white/5 rounded-lg animate-pulse"></span>
+            </p>
             <p class="text-xs text-gray-500 mt-2">Validated certifications and exams</p>
         </div>
 
@@ -73,7 +78,10 @@
                 </div>
                 <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Active Phases</span>
             </div>
-            <p class="text-4xl font-display font-black text-white">{{ $activeRounds->count() }}</p>
+            <p class="text-4xl font-display font-black text-white">
+                <span wire:loading.remove>{{ $activeRounds->count() }}</span>
+                <span wire:loading class="inline-block w-20 h-10 bg-white/5 rounded-lg animate-pulse"></span>
+            </p>
             <p class="text-xs text-gray-500 mt-2">Current available competition tiers</p>
         </div>
     </div>

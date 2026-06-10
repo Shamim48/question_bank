@@ -19,8 +19,15 @@ class ExamTake extends Component
 
     public function mount($exam = null)
     {
-        if ($exam) {
-            $this->exam = Exam::findOrFail($exam);
+        // Accept either an Exam model or an exam id
+        if ($exam instanceof Exam) {
+            $this->exam = $exam;
+        } elseif ($exam) {
+            $this->exam = Exam::find($exam);
+        }
+
+        if (! $this->exam) {
+            abort(404);
         }
 
         if ($this->exam->user_id !== auth()->id()) {
