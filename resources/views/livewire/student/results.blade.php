@@ -78,7 +78,7 @@
     <div>
         <div class="flex items-center justify-between mb-8">
             <h3 class="text-2xl font-display font-bold text-white">Deployment Log</h3>
-            <p class="text-xs text-indigo-400 font-bold uppercase tracking-widest">Temporal Feed</p>
+            <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Temporal Feed</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -103,7 +103,7 @@
                             <p
                                 class="text-2xl font-display font-black text-white leading-none group-hover:translate-x-[-4px] transition-transform">
                                 {{ number_format($exam->total_score ?? 0, 1) }}</p>
-                            <p class="text-[10px] font-bold text-gray-700 uppercase tracking-widest mt-1">Weighted</p>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Weighted</p>
                         </div>
                     </div>
                     <!-- Background decoration -->

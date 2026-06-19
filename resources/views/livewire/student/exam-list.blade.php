@@ -59,8 +59,8 @@
                                 </div>
                             </div>
 
-                            <h4 class="text-xl font-display font-bold text-white mb-2 leading-tight group-hover:text-indigo-400 transition-colors">{{ $subject->name }}</h4>
-                            <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-6 block">{{ $subject->questions()->count() }} Strategic Nodes Detected</p>
+                            <h4 class="text-xl font-display font-bold text-slate-900 mb-2 leading-tight group-hover:text-indigo-400 transition-colors">{{ $subject->name }}</h4>
+                            <p class="text-[10px] text-slate-500 uppercase tracking-widest mb-6 block">{{ $subject->questions()->count() }} Strategic Nodes Detected</p>
                             
                             @if($completed)
                                 <div class="mt-4 pt-6 border-t border-white/5 flex items-center justify-between">

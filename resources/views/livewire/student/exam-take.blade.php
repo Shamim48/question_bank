@@ -70,7 +70,7 @@
 
         <!-- Main Workspace -->
         <div class="flex-1 flex flex-col max-w-4xl mx-auto w-full">
-            <div class="glass-card rounded-[3rem] p-8 lg:p-12 mb-8 border border-white/5 relative overflow-hidden group">
+            <div class="glass-card rounded-[3rem] p-8 lg:p-12 mb-8 border border-white/10 bg-slate-950/10 relative overflow-hidden group shadow-soft">
                 <!-- Media Area -->
                 @if($currentQuestion['type'] !== 'text' && $currentQuestion['media_url'])
                     <div class="mb-10 rounded-[2rem] overflow-hidden border border-white/5 bg-black/20 p-2 shadow-inner">
@@ -93,7 +93,7 @@
                 @endif
 
                 @if($currentQuestion['content'])
-                    <h2 class="text-2xl lg:text-3xl font-display font-bold text-black mb-10 leading-relaxed">
+                    <h2 class="text-2xl lg:text-3xl font-display font-bold text-slate-950 mb-10 leading-relaxed">
                         {{ $currentQuestion['content'] }}
                     </h2>
                 @endif
@@ -102,11 +102,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     @foreach($currentQuestion['options'] as $option)
                         <button wire:click="selectOption({{ $option['id'] }})"
-                            class="group relative flex items-center gap-4 p-6 rounded-[2rem] border transition-all duration-300 text-left {{ $selectedOption == $option['id'] ? 'bg-indigo-600 border-indigo-500 shadow-xl shadow-indigo-600/30' : 'bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/[0.08]' }}">
-                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black transition-colors {{ $selectedOption == $option['id'] ? 'bg-white text-indigo-600' : 'bg-white/10 text-gray-500 group-hover:bg-white/20 group-hover:text-white' }}">
+                            class="group relative flex items-center gap-4 p-6 rounded-[2rem] border border-white/10 bg-slate-900/10 transition-all duration-300 text-left {{ $selectedOption == $option['id'] ? 'bg-indigo-600 border-indigo-500 shadow-xl shadow-indigo-600/20' : 'hover:border-white/20 hover:bg-white/10' }}">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black transition-colors {{ $selectedOption == $option['id'] ? 'bg-white text-indigo-600' : 'bg-white/10 text-slate-200 group-hover:bg-white/20 group-hover:text-slate-950' }}">
                                 {{ chr(64 + $option['option_number']) }}
                             </div>
-                            <span class="text-base font-medium {{ $selectedOption == $option['id'] ? 'text-white' : 'text-gray-400 group-hover:text-white' }} transition-colors">
+                            <span class="text-base font-medium {{ $selectedOption == $option['id'] ? 'text-white' : 'text-slate-950 group-hover:text-slate-900' }} transition-colors">
                                 {{ $option['option_text'] }}
                             </span>
                             @if($selectedOption == $option['id'])

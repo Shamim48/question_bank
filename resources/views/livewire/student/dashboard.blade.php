@@ -84,7 +84,7 @@
             <div class="flex items-center justify-between mb-8">
                 <div>
                     <h3 class="text-2xl font-display font-bold text-white">Active Tiers</h3>
-                    <p class="text-sm text-gray-500">Currently live and accessible phases</p>
+                    <p class="text-sm text-gray-400">Currently live and accessible phases</p>
                 </div>
                 <a href="{{ route('student.exams') }}"
                     class="text-xs font-bold text-indigo-400 uppercase tracking-widest hover:text-white transition-colors">Expand
@@ -138,7 +138,7 @@
                 <div class="flex items-center justify-between mb-12">
                     <div>
                         <h3 class="text-2xl font-display font-bold text-white">Appraisal History</h3>
-                        <p class="text-sm text-gray-500">Historical performance data and domain scores</p>
+                        <p class="text-sm text-gray-400">Historical performance data and domain scores</p>
                     </div>
                     <div class="w-12 h-12 glass rounded-2xl flex items-center justify-center text-indigo-400">
                         <i data-lucide="trending-up" class="w-6 h-6"></i>
