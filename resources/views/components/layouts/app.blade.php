@@ -371,10 +371,9 @@
             lucide.createIcons();
         });
 
-        // Re-init on Livewire navigate or updates
+        // Re-init icons on Livewire navigate (Tailwind CDN uses MutationObserver — no need to re-init)
         document.addEventListener('livewire:navigated', () => {
             lucide.createIcons();
-            if (window.tailwind) { window.tailwind.init(); }
         });
 
         window.addEventListener('reinitIcons', () => {

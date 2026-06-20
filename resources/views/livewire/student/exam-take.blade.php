@@ -2,17 +2,17 @@
     @if($examCompleted)
         <!-- Celebration / Completion Screen -->
         <div class="flex-1 flex items-center justify-center py-12">
-            <div class="glass-card rounded-[3rem] p-12 lg:p-16 max-w-2xl w-full text-center relative overflow-hidden border border-white/10">
+            <div class="glass-card rounded-[3rem] p-12 lg:p-16 max-w-2xl w-full text-center relative overflow-hidden border border-gray-100">
                 <div class="relative z-10">
-                    <div class="w-24 h-24 rounded-3xl bg-emerald-500/10 flex items-center justify-center mx-auto mb-8 animate-bounce">
-                        <i data-lucide="award" class="w-12 h-12 text-emerald-400"></i>
+                    <div class="w-24 h-24 rounded-3xl bg-emerald-100 flex items-center justify-center mx-auto mb-8 animate-bounce">
+                        <i data-lucide="award" class="w-12 h-12 text-emerald-500"></i>
                     </div>
-                    <h2 class="text-4xl font-display font-black text-white mb-4">Mission Accomplished</h2>
-                    <p class="text-gray-400 text-lg mb-10">Your strategic analysis is complete. Domain metrics have been archived.</p>
-                    
-                    <div class="bg-white/5 rounded-[2rem] p-10 mb-10 border border-white/5">
-                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em] mb-2">Validated Score</p>
-                        <p class="text-7xl font-display font-black text-white leading-none">{{ number_format($exam->total_score ?? 0, 1) }}</p>
+                    <h2 class="text-4xl font-display font-black text-gray-900 mb-4">Mission Accomplished</h2>
+                    <p class="text-gray-500 text-lg mb-10">Your strategic analysis is complete. Domain metrics have been archived.</p>
+
+                    <div class="bg-gray-50 rounded-[2rem] p-10 mb-10 border border-gray-100">
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-2">Validated Score</p>
+                        <p class="text-7xl font-display font-black text-gray-900 leading-none">{{ number_format($exam->total_score ?? 0, 1) }}</p>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -21,31 +21,87 @@
                             Return to Grid
                         </a>
                         <a href="{{ route('student.results') }}"
-                            class="px-8 py-4 glass hover:bg-white/10 text-white rounded-2xl text-sm font-bold uppercase tracking-widest transition-all border-white/10">
+                            class="px-8 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl text-sm font-bold uppercase tracking-widest transition-all border border-gray-200">
                             Detailed Briefing
                         </a>
                     </div>
                 </div>
-                
-                <!-- Background Accent -->
                 <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl"></div>
             </div>
         </div>
+
+        <!-- Answer Review Section -->
+        @if(count($reviewAnswers) > 0)
+            <div class="max-w-4xl mx-auto w-full pb-16">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
+                        <i data-lucide="list-checks" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-display font-bold text-gray-900">Answer Review</h3>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest">
+                            {{ collect($reviewAnswers)->where('is_correct', true)->count() }} / {{ count($reviewAnswers) }} Correct
+                        </p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    @foreach($reviewAnswers as $index => $answer)
+                        <div class="glass-card rounded-[2rem] p-6 border {{ $answer['is_correct'] ? 'border-emerald-200' : 'border-red-200' }} relative overflow-hidden">
+                            <div class="absolute left-0 top-0 bottom-0 w-1 rounded-l-[2rem] {{ $answer['is_correct'] ? 'bg-emerald-500' : 'bg-red-500' }}"></div>
+
+                            <div class="pl-4">
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Q{{ $index + 1 }}</p>
+                                    @if($answer['answered'])
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider {{ $answer['is_correct'] ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-red-100 text-red-700 border border-red-200' }}">
+                                            {{ $answer['is_correct'] ? 'Correct' : 'Incorrect' }}
+                                        </span>
+                                    @else
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-500 border border-gray-200">
+                                            Skipped
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <p class="text-sm font-medium text-gray-900 mb-4 leading-relaxed">{{ $answer['question_content'] }}</p>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div class="rounded-xl p-4 {{ $answer['answered'] && !$answer['is_correct'] ? 'bg-red-50 border border-red-200' : 'bg-gray-50 border border-gray-100' }}">
+                                        <p class="text-[9px] font-bold uppercase tracking-widest mb-1 {{ $answer['answered'] && !$answer['is_correct'] ? 'text-red-500' : 'text-gray-400' }}">Your Answer</p>
+                                        <p class="text-sm font-medium {{ $answer['answered'] ? ($answer['is_correct'] ? 'text-emerald-600' : 'text-red-600') : 'text-gray-400 italic' }}">
+                                            {{ $answer['answered'] ? $answer['selected_option_text'] : 'No answer given' }}
+                                        </p>
+                                    </div>
+                                    @if(!$answer['is_correct'])
+                                        <div class="rounded-xl p-4 bg-emerald-50 border border-emerald-200">
+                                            <p class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest mb-1">Correct Answer</p>
+                                            <p class="text-sm font-medium text-emerald-700">{{ $answer['correct_option_text'] ?? 'N/A' }}</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
     @elseif($currentQuestion)
-        <!-- Top HUD (Fixed) -->
-        <div class="sticky top-0 z-50 glass-card rounded-[2rem] p-6 mb-10 border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-2xl">
+        <!-- Top HUD -->
+        <div class="sticky top-0 z-50 glass-card rounded-[2rem] p-6 mb-10 border border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-md">
             <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-xl bg-indigo-600/10 flex items-center justify-center text-indigo-400">
+                <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
                     <i data-lucide="layers" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h3 class="text-sm font-bold text-white uppercase tracking-wider">{{ $exam->subject->name }}</h3>
-                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Question {{ $currentQuestionIndex + 1 }} <span class="text-gray-700 mx-1">/</span> {{ $totalQuestions }}</p>
+                    <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider">{{ $exam->subject->name }}</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Question {{ $currentQuestionIndex + 1 }} <span class="text-gray-300 mx-1">/</span> {{ $totalQuestions }}</p>
                 </div>
             </div>
 
             <div class="flex-1 max-w-md hidden md:block px-8">
-                <div class="w-full bg-white/5 rounded-full h-1.5 overflow-hidden">
+                <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                     <div class="bg-gradient-to-r from-indigo-500 to-purple-500 h-full rounded-full transition-all duration-700 ease-out"
                         style="width: {{ (($currentQuestionIndex + 1) / $totalQuestions) * 100 }}%"></div>
                 </div>
@@ -53,27 +109,27 @@
 
             <div class="flex items-center gap-6" x-data="timer({{ $timeRemaining }})" x-init="startTimer()">
                 <div class="text-right">
-                    <p class="text-[8px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-1">Time Remaining</p>
-                    <p class="text-2xl font-display font-black leading-none tracking-tight" :class="seconds <= 10 ? 'text-red-500 animate-pulse' : 'text-indigo-400'" x-text="formatTime()"></p>
+                    <p class="text-[8px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">Time Remaining</p>
+                    <p class="text-2xl font-display font-black leading-none tracking-tight" :class="seconds <= 10 ? 'text-red-500 animate-pulse' : 'text-indigo-600'" x-text="formatTime()"></p>
                 </div>
-                <div class="w-px h-8 bg-white/5"></div>
-                <button wire:click="submitAnswer" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-indigo-600 text-white transition-all flex items-center justify-center">
+                <div class="w-px h-8 bg-gray-200"></div>
+                <button wire:click="submitAnswer" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-indigo-600 text-gray-500 hover:text-white transition-all flex items-center justify-center">
                     <i data-lucide="chevron-right" class="w-5 h-5"></i>
                 </button>
             </div>
         </div>
 
         <!-- Progress Mobile -->
-        <div class="md:hidden w-full bg-white/5 rounded-full h-1 mb-6 overflow-hidden">
+        <div class="md:hidden w-full bg-gray-200 rounded-full h-1.5 mb-6 overflow-hidden">
             <div class="bg-indigo-500 h-full rounded-full transition-all" style="width: {{ (($currentQuestionIndex + 1) / $totalQuestions) * 100 }}%"></div>
         </div>
 
         <!-- Main Workspace -->
         <div class="flex-1 flex flex-col max-w-4xl mx-auto w-full">
-            <div class="glass-card rounded-[3rem] p-8 lg:p-12 mb-8 border border-white/10 bg-slate-950/10 relative overflow-hidden group shadow-soft">
+            <div class="glass-card rounded-[3rem] p-8 lg:p-12 mb-8 border border-gray-200 bg-white relative overflow-hidden group shadow-sm">
                 <!-- Media Area -->
                 @if($currentQuestion['type'] !== 'text' && $currentQuestion['media_url'])
-                    <div class="mb-10 rounded-[2rem] overflow-hidden border border-white/5 bg-black/20 p-2 shadow-inner">
+                    <div class="mb-10 rounded-[2rem] overflow-hidden border border-gray-200 bg-gray-100 p-2">
                         @if($currentQuestion['type'] === 'image')
                             <img src="{{ asset('storage/' . $currentQuestion['media_url']) }}" class="w-full max-h-[400px] object-contain rounded-2xl group-hover:scale-[1.02] transition-transform duration-700">
                         @elseif($currentQuestion['type'] === 'video')
@@ -86,32 +142,41 @@
                             </div>
                         @elseif($currentQuestion['type'] === 'audio')
                             <div class="p-8 flex items-center justify-center">
-                                <audio controls class="w-full max-w-sm custom-audio"><source src="{{ asset('storage/' . $currentQuestion['media_url']) }}"></audio>
+                                <audio controls class="w-full max-w-sm"><source src="{{ asset('storage/' . $currentQuestion['media_url']) }}"></audio>
                             </div>
                         @endif
                     </div>
                 @endif
 
                 @if($currentQuestion['content'])
-                    <h2 class="text-2xl lg:text-3xl font-display font-bold text-slate-950 mb-10 leading-relaxed">
+                    <h2 class="text-2xl lg:text-3xl font-display font-bold text-gray-900 mb-10 leading-relaxed">
                         {{ $currentQuestion['content'] }}
                     </h2>
                 @endif
 
-                <!-- Options Sector -->
+                <!-- Options -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     @foreach($currentQuestion['options'] as $option)
                         <button wire:click="selectOption({{ $option['id'] }})"
-                            class="group relative flex items-center gap-4 p-6 rounded-[2rem] border border-white/10 bg-slate-900/10 transition-all duration-300 text-left {{ $selectedOption == $option['id'] ? 'bg-indigo-600 border-indigo-500 shadow-xl shadow-indigo-600/20' : 'hover:border-white/20 hover:bg-white/10' }}">
-                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black transition-colors {{ $selectedOption == $option['id'] ? 'bg-white text-indigo-600' : 'bg-white/10 text-slate-200 group-hover:bg-white/20 group-hover:text-slate-950' }}">
+                            class="group/opt relative flex items-center gap-4 p-5 rounded-[1.5rem] border transition-all duration-200 text-left
+                                {{ $selectedOption == $option['id']
+                                    ? 'bg-indigo-600 border-indigo-500 shadow-lg shadow-indigo-600/20'
+                                    : 'bg-gray-50 border-gray-200 hover:border-indigo-300 hover:bg-indigo-50' }}">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black transition-colors shrink-0
+                                {{ $selectedOption == $option['id']
+                                    ? 'bg-white text-indigo-600'
+                                    : 'bg-white border border-gray-200 text-gray-500 group-hover/opt:border-indigo-300 group-hover/opt:text-indigo-600' }}">
                                 {{ chr(64 + $option['option_number']) }}
                             </div>
-                            <span class="text-base font-medium {{ $selectedOption == $option['id'] ? 'text-white' : 'text-slate-950 group-hover:text-slate-900' }} transition-colors">
+                            <span class="text-sm font-medium transition-colors
+                                {{ $selectedOption == $option['id']
+                                    ? 'text-white'
+                                    : 'text-gray-700 group-hover/opt:text-indigo-700' }}">
                                 {{ $option['option_text'] }}
                             </span>
                             @if($selectedOption == $option['id'])
-                                <div class="absolute right-6">
-                                    <i data-lucide="check" class="w-5 h-5 text-white"></i>
+                                <div class="absolute right-5">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-white/80"></i>
                                 </div>
                             @endif
                         </button>
@@ -121,21 +186,22 @@
 
             <!-- Global Action Bar -->
             <div class="flex items-center justify-between pb-12">
-                <p class="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Status: <span class="text-emerald-500">Connected to Grid</span></p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status: <span class="text-emerald-500">Connected to Grid</span></p>
                 <button wire:click="submitAnswer"
-                    class="group px-10 py-5 bg-white text-gray-900 hover:bg-indigo-500 hover:text-white rounded-[2rem] text-xs font-black uppercase tracking-[0.2em] transition-all shadow-2xl active:scale-95 disabled:opacity-50 flex items-center gap-3"
+                    class="group px-10 py-5 bg-indigo-600 text-white hover:bg-indigo-500 rounded-[2rem] text-xs font-black uppercase tracking-[0.2em] transition-all shadow-lg shadow-indigo-600/30 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-3"
                     {{ !$selectedOption ? 'disabled' : '' }}>
-                    {{ $currentQuestionIndex < $totalQuestions - 1 ? 'Next Node' : 'Finalize Analysis' }}
+                    {{ $currentQuestionIndex < $totalQuestions - 1 ? 'Next Question' : 'Finalize Analysis' }}
                     <i data-lucide="zap" class="w-4 h-4 group-hover:rotate-12 transition-transform"></i>
                 </button>
             </div>
         </div>
+
     @else
         <div class="flex-1 flex items-center justify-center">
             <div class="text-center">
-                <i data-lucide="cloud-off" class="w-12 h-12 text-gray-700 mx-auto mb-4"></i>
+                <i data-lucide="cloud-off" class="w-12 h-12 text-gray-300 mx-auto mb-4"></i>
                 <p class="text-gray-500 font-medium">No valid assessment data found.</p>
-                <a href="{{ route('student.exams') }}" class="mt-4 inline-block text-indigo-400 text-xs font-bold uppercase tracking-widest hover:text-white">Relink Registry</a>
+                <a href="{{ route('student.exams') }}" class="mt-4 inline-block text-indigo-500 text-xs font-bold uppercase tracking-widest hover:text-indigo-700">Return to Exams</a>
             </div>
         </div>
     @endif
