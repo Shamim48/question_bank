@@ -34,19 +34,19 @@
                 <h4 class="text-sm font-medium text-indigo-300 mb-3">Export to Excel</h4>
                 <p class="text-sm text-gray-400 mb-4">Download questions by applying conditions (filters).</p>
                 <div class="space-y-3 mb-4">
-                    <select wire:model="export_round_id" class="w-full bg-gray-800/50 border border-gray-700 rounded-xl px-4 py-2 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    <select wire:model="export_round_id" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2 text-black text-sm focus:ring-2 focus:ring-indigo-500/50">
                         <option value="">All Rounds</option>
                         @foreach($rounds as $round)
                             <option value="{{ $round->id }}">{{ $round->name }}</option>
                         @endforeach
                     </select>
-                    <select wire:model="export_subject_id" class="w-full bg-gray-800/50 border border-gray-700 rounded-xl px-4 py-2 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    <select wire:model="export_subject_id" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2 text-black text-sm focus:ring-2 focus:ring-indigo-500/50">
                         <option value="">All Subjects</option>
                         @foreach($subjects as $subject)
                             <option value="{{ $subject->id }}">{{ $subject->name }} ({{ $subject->round->name }})</option>
                         @endforeach
                     </select>
-                    <select wire:model="export_group_id" class="w-full bg-gray-800/50 border border-gray-700 rounded-xl px-4 py-2 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    <select wire:model="export_group_id" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2 text-black text-sm focus:ring-2 focus:ring-indigo-500/50">
                         <option value="">All Groups</option>
                         @foreach($groups as $group)
                             <option value="{{ $group->id }}">{{ $group->name }}</option>

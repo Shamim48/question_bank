@@ -1,4 +1,4 @@
-<div class="space-y-8 animate__animated animate__fadeIn">
+﻿<div class="space-y-8 animate__animated animate__fadeIn">
     <!-- Header Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -120,14 +120,14 @@
                 <form wire:submit.prevent="save" class="space-y-6">
                     <div class="space-y-2">
                         <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Book Title / Caption</label>
-                        <input type="text" wire:model="title" class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50" placeholder="e.g. Science Part 1">
+                        <input type="text" wire:model="title" class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50" placeholder="e.g. Science Part 1">
                         @error('title') <span class="text-red-400 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Round Limit</label>
-                            <select wire:model="round_id" class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50">
+                            <select wire:model="round_id" class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50">
                                 <option value="">Select Round</option>
                                 @foreach($rounds as $round)
                                     <option value="{{ $round->id }}">{{ $round->name }}</option>
@@ -138,7 +138,7 @@
                         
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Group Policy</label>
-                            <select wire:model="group_id" class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50">
+                            <select wire:model="group_id" class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50">
                                 <option value="">Select Group</option>
                                 @foreach($groups as $group)
                                     <option value="{{ $group->id }}">{{ $group->name }}</option>
@@ -190,3 +190,4 @@
         });
     });
 </script>
+

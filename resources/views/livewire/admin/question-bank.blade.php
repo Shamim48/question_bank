@@ -1,4 +1,4 @@
-<div class="space-y-8 animate__animated animate__fadeIn">
+﻿<div class="space-y-8 animate__animated animate__fadeIn">
     <!-- Header Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -214,7 +214,7 @@
                         </div>
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Media Format</label>
-                            <select wire:model="type" class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50">
+                            <select wire:model="type" class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50">
                                 <option value="text">Pure Text</option>
                                 <option value="image">Image Attachment</option>
                                 <option value="audio">Audio Stream</option>
@@ -258,11 +258,11 @@
                     <div class="grid grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Time Limit (s)</label>
-                            <input type="number" wire:model="time_limit" class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50" min="5">
+                            <input type="number" wire:model="time_limit" class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50" min="5">
                         </div>
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Mark Value</label>
-                            <input type="number" wire:model="points" class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50" min="1">
+                            <input type="number" wire:model="points" class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50" min="1">
                         </div>
                     </div>
 

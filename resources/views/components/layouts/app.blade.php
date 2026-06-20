@@ -126,12 +126,27 @@
         textarea {
             background: rgba(255, 255, 255, 0.8) !important;
             border: 1px solid rgba(0, 0, 0, 0.1) !important;
-            color: #0f172a !important;
+            color: #000000 !important;
         }
 
-        input:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: #6366f1 !important;
             box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+        }
+
+        /* Select option text always black */
+        select option,
+        select option:checked,
+        select option:hover {
+            color: #000000 !important;
+            background: #ffffff;
+        }
+
+        /* Custom dropdown menu items */
+        .dropdown-item {
+            color: #000000 !important;
         }
 
         [x-cloak] {
@@ -177,8 +192,9 @@
                         class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/30">
                         <i data-lucide="zap" class="w-6 h-6 text-white fill-white"></i>
                     </div>
-                    <span class="font-display font-bold text-xl tracking-tight gradient-text whitespace-nowrap">QB
-                        Admin</span>
+                    <span class="font-display font-bold text-xl tracking-tight gradient-text whitespace-nowrap">
+                        {{ auth()->check() && auth()->user()->isAdmin() ? 'QB Admin' : 'Student Portal' }}
+                    </span>
                 </div>
                 <div x-show="sidebarCollapsed" class="w-full flex justify-center">
                     <div
@@ -206,6 +222,7 @@
                             ['route' => 'admin.certificates', 'icon' => 'scroll', 'label' => 'Certificates'],
                             ['route' => 'admin.pdf-books', 'icon' => 'book', 'label' => 'PDF Books'],
                             ['route' => 'ambassadors', 'icon' => 'users', 'label' => 'Ambassadors'],
+                            ['route' => 'admin.profile', 'icon' => 'user-round', 'label' => 'My Profile'],
                         ];
                     } else {
                         $navItems = [
@@ -214,6 +231,7 @@
                             ['route' => 'student.results', 'icon' => 'award', 'label' => 'Results'],
                             ['route' => 'student.certificates', 'icon' => 'scroll', 'label' => 'Certificates'],
                             ['route' => 'student.pdf-books', 'icon' => 'book', 'label' => 'PDF Books'],
+                            ['route' => 'student.profile', 'icon' => 'user-round', 'label' => 'My Profile'],
                         ];
                     }
                 @endphp
@@ -283,19 +301,36 @@
                             </button>
                             <!-- Dropdown -->
                             <div x-show="open" @click.away="open = false"
-                                x-transition:enter="transition-transform duration-200"
+                                x-transition:enter="transition-opacity transition-transform duration-200"
                                 x-transition:enter-start="scale-95 opacity-0"
-                                class="absolute right-0 mt-3 w-56 glass rounded-2xl p-2 shadow-2xl border-white/5"
+                                x-transition:leave="transition-opacity duration-150"
+                                x-transition:leave-end="opacity-0"
+                                class="absolute right-0 mt-3 w-56 bg-white rounded-2xl p-2 shadow-xl border border-gray-100"
                                 x-cloak>
-                                <a href="#"
-                                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-indigo-50 text-sm transition-colors text-gray-900">
-                                    <i data-lucide="user" class="w-4 h-4"></i> Profile Settings
-                                </a>
-                                <div class="h-px bg-black/10 my-1"></div>
+                                <!-- User info header -->
+                                <div class="px-3 py-2.5 mb-1">
+                                    <p class="text-xs font-bold text-black">{{ auth()->user()->name }}</p>
+                                    <p class="text-[10px] text-gray-400 truncate">{{ auth()->user()->email }}</p>
+                                </div>
+                                <div class="h-px bg-gray-100 my-1"></div>
+
+                                @if(auth()->user()->isAdmin())
+                                    <a href="{{ route('admin.profile') }}"
+                                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-sm font-medium transition-colors text-black">
+                                        <i data-lucide="user-round" class="w-4 h-4 text-gray-500"></i> My Profile
+                                    </a>
+                                @elseif(auth()->user()->isStudent())
+                                    <a href="{{ route('student.profile') }}"
+                                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-sm font-medium transition-colors text-black">
+                                        <i data-lucide="user-round" class="w-4 h-4 text-gray-500"></i> My Profile
+                                    </a>
+                                @endif
+
+                                <div class="h-px bg-gray-100 my-1"></div>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit"
-                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 text-sm transition-colors text-red-600">
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 text-sm font-medium transition-colors text-red-600">
                                         <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
                                     </button>
                                 </form>
@@ -347,7 +382,9 @@
             <!-- Same content as sidebar, omitted for brevity but should be functional -->
             <div class="p-6 h-full flex flex-col">
                 <div class="flex items-center justify-between mb-8">
-                    <span class="font-display font-bold text-xl gradient-text">QB Admin</span>
+                    <span class="font-display font-bold text-xl gradient-text">
+                        {{ auth()->check() && auth()->user()->isAdmin() ? 'QB Admin' : 'Student Portal' }}
+                    </span>
                     <button @click="mobileMenuOpen = false" class="text-gray-600 hover:text-indigo-700"><i data-lucide="x"
                             class="w-6 h-6"></i></button>
                 </div>

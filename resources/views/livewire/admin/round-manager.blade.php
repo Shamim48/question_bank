@@ -1,4 +1,4 @@
-<div class="space-y-8 animate__animated animate__fadeIn">
+﻿<div class="space-y-8 animate__animated animate__fadeIn">
     <!-- Header Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -175,7 +175,7 @@
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Round
                                 Designation</label>
                             <input type="text" wire:model="name"
-                                class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white"
+                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white"
                                 placeholder="e.g. Preliminary Qualifiers">
                             @error('name') <span class="text-red-400 text-[10px]">{{ $message }}</span> @enderror
                         </div>
@@ -183,7 +183,7 @@
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Sort
                                 Key</label>
                             <input type="number" wire:model="order"
-                                class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white text-center">
+                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white text-center">
                         </div>
                     </div>
 
@@ -191,7 +191,7 @@
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Strategic
                             Description</label>
                         <textarea wire:model="description" rows="3"
-                            class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white placeholder-gray-600"
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white placeholder-gray-600"
                             placeholder="Define the rules or scope for participants..."></textarea>
                     </div>
 

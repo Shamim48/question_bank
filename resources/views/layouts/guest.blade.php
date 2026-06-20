@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -9,62 +9,67 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    }
                 }
             }
         }
     </script>
+
     <style>
-        .glass {
-            background: rgba(30, 27, 75, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(99, 102, 241, 0.15);
+        body {
+            background-color: #f5f5f0;
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .login-card {
+            background: #ffffff;
+            border: 1px solid #e8e8e3;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 40px -10px rgba(0,0,0,0.08);
         }
 
         .fade-in {
-            animation: fadeIn 0.6s ease-out;
+            animation: fadeIn 0.5s ease-out;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
     </style>
+
     @livewireStyles
 </head>
 
-<body class="font-sans antialiased bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 text-gray-100">
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
-        <div class="mb-6 fade-in">
-            <a href="/" class="text-3xl font-bold gradient-text">✦ QuestionBank</a>
-            <p class="text-center text-indigo-300/50 text-sm mt-2">Learning Management System</p>
+<body class="font-sans antialiased min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Brand -->
+    <div class="mb-8 text-center fade-in">
+        <div class="w-14 h-14 rounded-2xl bg-gray-900 flex items-center justify-center mx-auto mb-4 shadow-md">
+            <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
         </div>
-        <div class="w-full sm:max-w-md glass rounded-2xl p-8 shadow-2xl fade-in">
-            {{ $slot }}
-        </div>
+        <h1 class="font-display font-black text-gray-900 text-2xl tracking-tight">QuestionBank</h1>
+        <p class="text-gray-400 text-sm mt-1">Learning Management System</p>
     </div>
+
+    <!-- Card -->
+    <div class="login-card w-full max-w-md rounded-2xl p-8 fade-in">
+        {{ $slot }}
+    </div>
+
+    <!-- Footer -->
+    <p class="mt-8 text-xs text-gray-400">&copy; {{ date('Y') }} QuestionBank. All rights reserved.</p>
+
     @livewireScripts
 </body>
 

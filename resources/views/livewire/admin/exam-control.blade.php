@@ -96,7 +96,7 @@
                             </div>
                         </div>
                         <div>
-                            <p class="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">
+                            <p class="text-lg font-bold text-black group-hover:text-indigo-400 transition-colors">
                                 {{ $exam->user->name ?? 'Unknown Sentinel' }}</p>
                             <p class="text-sm text-gray-500 mt-0.5">{{ $exam->round->name }} <span
                                     class="mx-2 text-gray-700">/</span> {{ $exam->subject->name }}</p>

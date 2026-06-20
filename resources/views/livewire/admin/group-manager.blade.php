@@ -1,4 +1,4 @@
-<div class="space-y-8 animate__animated animate__fadeIn">
+﻿<div class="space-y-8 animate__animated animate__fadeIn">
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -92,7 +92,7 @@
                     <div class="space-y-2">
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Group Name</label>
                         <input type="text" wire:model="name"
-                            class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-white"
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-white"
                             placeholder="e.g. Science Class 2024">
                         @error('name') <span class="text-red-400 text-[10px]">{{ $message }}</span> @enderror
                     </div>
@@ -100,7 +100,7 @@
                     <div class="space-y-2">
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Description (Optional)</label>
                         <textarea wire:model="description" rows="3"
-                            class="w-full bg-white/5 border-white/10 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-white"
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-white"
                             placeholder="Brief overview of this group..."></textarea>
                     </div>
 
@@ -119,3 +119,4 @@
         </div>
     @endif
 </div>
+

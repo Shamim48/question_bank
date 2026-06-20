@@ -83,6 +83,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/pdf-books', function () {
         return view('admin.pdf-books');
     })->name('admin.pdf-books');
+
+    Route::get('/profile', function () {
+        return view('admin.profile');
+    })->name('admin.profile');
 });
 
 // Student routes
@@ -110,6 +114,10 @@ Route::middleware(['auth', 'student'])->prefix('student')->group(function () {
     Route::get('/pdf-books', function () {
         return view('student.pdf-books');
     })->name('student.pdf-books');
+
+    Route::get('/profile', function () {
+        return view('student.profile');
+    })->name('student.profile');
 });
 
 // Certificate download (auth required)
