@@ -8,7 +8,9 @@ use App\Models\Subject;
 use App\Models\Question;
 use App\Models\Option;
 use App\Models\Ambassador;
+use App\Models\Division;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -109,6 +111,21 @@ class DatabaseSeeder extends Seeder
                 'event' => $events[rand(0, count($events) - 1)],
                 'division' => $divisions[rand(0, count($divisions) - 1)],
                 'district' => $districts[rand(0, count($districts) - 1)],
+            ]);
+        }
+
+        // Seed Divisions
+        $divisions = Division::count();
+        if($divisions < 1) {
+            DB::table('divisions')->insert([
+                ['country_id' => 1, 'name' => 'Chattogram',  'bn_name' => 'চট্টগ্রাম',  'status' => 1],
+                ['country_id' => 1, 'name' => 'Rajshahi',    'bn_name' => 'রাজশাহী',    'status' => 1],
+                ['country_id' => 1, 'name' => 'Khulna',      'bn_name' => 'খুলনা',      'status' => 1],
+                ['country_id' => 1, 'name' => 'Barishal',    'bn_name' => 'বরিশাল',     'status' => 1],
+                ['country_id' => 1, 'name' => 'Sylhet',      'bn_name' => 'সিলেট',      'status' => 1],
+                ['country_id' => 1, 'name' => 'Dhaka',       'bn_name' => 'ঢাকা',       'status' => 1],
+                ['country_id' => 1, 'name' => 'Rangpur',     'bn_name' => 'রংপুর',      'status' => 1],
+                ['country_id' => 1, 'name' => 'Mymensingh',  'bn_name' => 'ময়মনসিংহ',  'status' => 1],
             ]);
         }
     }
