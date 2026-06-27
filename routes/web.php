@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -10,14 +11,30 @@ Route::get('/run-migrate-seed', function () {
 });
 
 // Public
+// Route::get('/', function () {
+//     if (auth()->check()) {
+//         return auth()->user()->isAdmin()
+//             ? redirect()->route('admin.dashboard')
+//             : redirect()->route('student.dashboard');
+//     }
+//     return redirect()->route('login');
+// });
+
 Route::get('/', function () {
-    if (auth()->check()) {
-        return auth()->user()->isAdmin()
-            ? redirect()->route('admin.dashboard')
-            : redirect()->route('student.dashboard');
-    }
-    return redirect()->route('login');
+    return redirect('/registration');
 });
+
+// User Auth (Website)
+Route::get('/user/login', [WebsiteController::class, 'showLogin'])->name('user.login');
+Route::post('/user/login', [WebsiteController::class, 'login'])->name('login.submit');
+Route::post('/user/logout', [WebsiteController::class, 'logout'])->name('user.logout');
+
+Route::get('registration', [WebsiteController::class, 'index'])->name('registration.index');
+Route::get('registration/student', [WebsiteController::class, 'participantRegistrationForm'])->name('registration.participant');
+Route::post('registration/student', [WebsiteController::class, 'studentRegister'])->name('registration.participant.submit');
+
+Route::get('/get-districts/{division}', [WebsiteController::class, 'getDistrict']);
+Route::get('/get-thanas/{district}', [WebsiteController::class, 'getThana']);
 
 // Ambassador search (public)
 Route::get('/ambassadors', function () {
