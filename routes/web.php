@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,9 @@ Route::post('/user/logout', [WebsiteController::class, 'logout'])->name('user.lo
 Route::get('registration', [WebsiteController::class, 'index'])->name('registration.index');
 Route::get('registration/student', [WebsiteController::class, 'participantRegistrationForm'])->name('registration.participant');
 Route::post('registration/student', [WebsiteController::class, 'studentRegister'])->name('registration.participant.submit');
+
+Route::get('registration/core/team', [WebsiteController::class, 'teamRegistrationForm'])->name('registration.core.team');
+Route::post('registration/team', [WebsiteController::class, 'teamRegister'])->name('registration.team.submit');
 
 Route::get('/get-districts/{division}', [WebsiteController::class, 'getDistrict']);
 Route::get('/get-thanas/{district}', [WebsiteController::class, 'getThana']);
@@ -104,6 +108,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/profile', function () {
         return view('admin.profile');
     })->name('admin.profile');
+
+    // Seasons CRUD
+    Route::resource('seasons', SeasonController::class)->names([
+        'index'   => 'admin.seasons.index',
+        'create'  => 'admin.seasons.create',
+        'store'   => 'admin.seasons.store',
+        'edit'    => 'admin.seasons.edit',
+        'update'  => 'admin.seasons.update',
+        'destroy' => 'admin.seasons.destroy',
+    ]);
 });
 
 // Student routes

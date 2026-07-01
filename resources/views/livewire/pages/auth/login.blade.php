@@ -91,5 +91,6 @@ new #[Layout('layouts.guest')] class extends Component {
                 Signing in...
             </span>
         </button>
+        <p>Don't have an account yet? <a style="text-decoration: underline;color: blue;" href="{{ route('registration.index') }}">Signup now</a></p>
     </form>
 </div>

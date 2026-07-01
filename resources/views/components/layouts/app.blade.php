@@ -222,6 +222,7 @@
                             ['route' => 'admin.certificates', 'icon' => 'scroll', 'label' => 'Certificates'],
                             ['route' => 'admin.pdf-books', 'icon' => 'book', 'label' => 'PDF Books'],
                             ['route' => 'ambassadors', 'icon' => 'users', 'label' => 'Ambassadors'],
+                            ['route' => 'admin.seasons.index', 'icon' => 'calendar', 'label' => 'Seasons', 'activePattern' => 'admin.seasons*'],
                             ['route' => 'admin.profile', 'icon' => 'user-round', 'label' => 'My Profile'],
                         ];
                     } else {
@@ -237,8 +238,9 @@
                 @endphp
 
                 @foreach($navItems as $item)
+                    @php $isActive = request()->routeIs($item['activePattern'] ?? $item['route']); @endphp
                     <a href="{{ route($item['route']) }}"
-                        class="sidebar-item group flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium hover:text-indigo-700 transition-all {{ request()->routeIs($item['route']) ? 'active' : 'text-gray-600 hover:bg-indigo-50' }}"
+                        class="sidebar-item group flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium hover:text-indigo-700 transition-all {{ $isActive ? 'active' : 'text-gray-600 hover:bg-indigo-50' }}"
                         :title="sidebarCollapsed ? '{{ $item['label'] }}' : ''">
                         <i data-lucide="{{ $item['icon'] }}"
                             class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110"></i>

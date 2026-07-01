@@ -258,7 +258,7 @@
     <div class="nav-container">
 
         <div class="logo">
-            <img src="https://studentsoftheyear.com/public/logo.png" alt="Logo">
+            <a href="/"><img src="https://studentsoftheyear.com/public/logo.png" alt="Logo"></a>
         </div>
 
         <ul class="nav-links" id="navMenu">
@@ -303,7 +303,7 @@
             <div class="header-right">
 
                 @guest
-                    <a href="{{ route('user.login') }}" class="btn-login">Login</a>
+                    <a href="{{ route('login') }}" class="btn-login">Login</a>
                     <a href="{{ route('registration.index') }}" class="btn-login">Signup</a>
                 @endguest
 

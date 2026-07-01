@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Registration</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" rel="stylesheet">
     <style>
         :root {
             --primary: #1f4f86;
@@ -197,6 +199,52 @@
             margin-top: -8px;
             margin-bottom: 8px;
         }
+
+        /* Select2 overrides to match form style */
+        .select2-container {
+            width: 100% !important;
+            margin-bottom: 10px;
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: auto;
+            padding: 10px 12px;
+            border: 1px solid #d6dbe6;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #757575;
+            display: flex;
+            align-items: center;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #757575;
+            padding: 0;
+            line-height: normal;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            top: 0;
+            right: 8px;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid #d6dbe6;
+            font-size: 13px;
+        }
+
+        .select2-dropdown {
+            border: 1px solid #d6dbe6;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #1f4f86;
+        }
     </style>
 </head>
 
@@ -204,24 +252,6 @@
     @include('website.components.header')
 
     <main class="container">
-        @if ($errors->any())
-            <div class="alert">
-                <ul style="padding-left: 16px;">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert">{{ session('error') }}</div>
-        @endif
-
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
         <div class="title">
             <h2>Join As a Participant</h2>
             <p>Fill in the form below to register as a student</p>
@@ -247,95 +277,65 @@
                         <h4>How did you know about us?</h4>
                         <select name="known_from">
                             <option value="">Please Select</option>
-                            <option value="Facebook" {{ old('known_from') == 'Facebook' ? 'selected' : '' }}>Facebook</option>
+                            <option value="Facebook" {{ old('known_from') == 'Facebook' ? 'selected' : '' }}>Facebook
+                            </option>
                             <option value="Mentor" {{ old('known_from') == 'Mentor' ? 'selected' : '' }}>Mentor</option>
-                            <option value="Ambassador" {{ old('known_from') == 'Ambassador' ? 'selected' : '' }}>Ambassador</option>
+                            <option value="Ambassador" {{ old('known_from') == 'Ambassador' ? 'selected' : '' }}>
+                                Ambassador
+                            </option>
                         </select>
                     </div>
 
                     <div class="card">
-                        <h4>Participant Information</h4>
-                        <input placeholder="Enter your full name *" type="text" name="name"
-                            value="{{ old('name') }}" required />
-                        @error('name') <div class="error-text">{{ $message }}</div> @enderror
-
-                        <div class="row">
-                            <div>
-                                <input placeholder="Enter your email *" type="email" name="email"
-                                    value="{{ old('email') }}" required />
-                                @error('email') <div class="error-text">{{ $message }}</div> @enderror
-                            </div>
-                            <div>
-                                <input placeholder="Enter your phone number" type="text" name="phone"
-                                    value="{{ old('phone') }}" />
-                                @error('phone') <div class="error-text">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-
-                        <input placeholder="Enter your institute name" type="text" name="institute_name"
-                            value="{{ old('institute_name') }}" />
-
-                        <div class="row">
-                            <select name="class">
-                                <option value="">Select Class</option>
-                                @foreach (['Class 6','Class 7','Class 8','Class 9','Class 10','SSC','HSC','Degree','Masters'] as $cls)
-                                    <option value="{{ $cls }}" {{ old('class') == $cls ? 'selected' : '' }}>{{ $cls }}</option>
-                                @endforeach
-                            </select>
-
-                            <select name="group">
-                                <option value="">Select Group</option>
-                                @foreach (['Science','Commerce','Humanities','General'] as $grp)
-                                    <option value="{{ $grp }}" {{ old('group') == $grp ? 'selected' : '' }}>{{ $grp }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="row">
-                            <select name="gender">
-                                <option value="">Select Gender</option>
-                                <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
-                                <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
-                                <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option>
-                            </select>
-                            <input type="date" name="date_of_birth" placeholder="Date of Birth"
-                                value="{{ old('date_of_birth') }}" />
-                        </div>
+                        <h4>Joining events</h4>
+                        <select name="season_id">
+                            <option value="">Please Select Season</option>
+                            @foreach ($seasons as $season)
+                                <option value="{{ $season->id }}"
+                                    {{ old('season_id') == $season->id ? 'selected' : '' }}>
+                                    {{ $season->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="card">
-                        <h4>Location</h4>
+                        <h4>Participate Information</h4>
                         <div class="row">
-                            <select id="division" name="division_id">
-                                <option value="">Select Division</option>
-                                @foreach ($divisions as $d)
-                                    <option value="{{ $d->id }}" {{ old('division_id') == $d->id ? 'selected' : '' }}>
-                                        {{ $d->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            <select id="district" name="district_id">
-                                <option value="">Select District</option>
-                                @foreach ($districts as $dis)
-                                    <option value="{{ $dis->id }}" {{ old('district_id') == $dis->id ? 'selected' : '' }}>
-                                        {{ $dis->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <input placeholder="Enter your first name" type="text" name="first_name"
+                                value="{{ old('first_name') }}" required />
+                            <input placeholder="Enter your last name" type="text" name="last_name"
+                                value="{{ old('last_name') }}" />
                         </div>
-
                         <div class="row">
-                            <select id="thana" name="upazilla_id">
-                                <option value="">Select Upazilla</option>
-                                @foreach ($upazillas as $u)
-                                    <option value="{{ $u->id }}" {{ old('upazilla_id') == $u->id ? 'selected' : '' }}>
-                                        {{ $u->name }}
+                            <input placeholder="Enter your email" type="email" name="email"
+                                value="{{ old('email') }}" />
+                            <input placeholder="Enter your phone number" type="text" name="phone"
+                                value="{{ old('phone') }}" />
+                        </div>
+                        <input placeholder="Enter your institute name" type="text" name="institute_name" value="{{ old('institute_name') }}" />
+                        <div class="row">
+
+                            <select name="class_id" id="classSelect">
+                                <option value="">Please Select Class</option>
+                                @foreach ($classes as $class)
+                                    <option value="{{ $class->id }}" data-group="{{ $class->group_id }}"
+                                        {{ old('class_id') == $class->id ? 'selected' : '' }}>
+                                        {{ $class->name }}
                                     </option>
                                 @endforeach
                             </select>
-                            <input type="text" name="address" placeholder="Village / Area"
-                                value="{{ old('address') }}" />
+
+                            <select id="groupSelect" name="group_id" class="form-control">
+                                <option value="">Select Group</option>
+                                @foreach ($groups as $group)
+                                    <option value="{{ $group->id }}"
+                                        data-id="{{ $group->id }}"
+                                        {{ old('group_id') == $group->id ? 'selected' : '' }}>
+                                        {{ $group->description }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
@@ -359,7 +359,7 @@
                         <button type="submit">Submit</button>
                     </div>
                     <p class="text-center" style="margin-top: 12px; font-size: 14px;">
-                        Already registered? <a href="{{ route('user.login') }}">Login Here</a>
+                        Already registered? <a href="{{ route('login') }}">Login Here</a>
                     </p>
                 </form>
             </div>
@@ -369,35 +369,43 @@
     @include('website.components.footer')
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        $('#division').on('change', function () {
-            let divisionId = $(this).val();
-            $('#district').html('<option value="">Loading...</option>');
-            $('#thana').html('<option value="">Select Upazilla</option>');
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-top-right',
+            timeOut: 4000,
+        };
 
-            if (divisionId) {
-                $.get('/get-districts/' + divisionId, function (data) {
-                    let options = '<option value="">Select District</option>';
-                    data.forEach(d => options += `<option value="${d.id}">${d.name}</option>`);
-                    $('#district').html(options);
-                });
-            } else {
-                $('#district').html('<option value="">Select District</option>');
-            }
-        });
+        @if (session('success'))
+            toastr.success('{{ session('success') }}');
+        @endif
 
-        $('#district').on('change', function () {
-            let districtId = $(this).val();
-            $('#thana').html('<option value="">Loading...</option>');
+        @if (session('error'))
+            toastr.error('{{ session('error') }}');
+        @endif
 
-            if (districtId) {
-                $.get('/get-thanas/' + districtId, function (data) {
-                    let options = '<option value="">Select Upazilla</option>';
-                    data.forEach(t => options += `<option value="${t.id}">${t.name}</option>`);
-                    $('#thana').html(options);
-                });
-            } else {
-                $('#thana').html('<option value="">Select Upazilla</option>');
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                toastr.error('{{ $error }}');
+            @endforeach
+        @endif
+
+        $(document).ready(function () {
+            // Class → Group auto-select
+            $('#classSelect').on('change', function () {
+                const groupId = $(this).find(':selected').data('group');
+                if (groupId) {
+                    $('#groupSelect option[data-id="' + groupId + '"]').prop('selected', true);
+                } else {
+                    $('#groupSelect').val('');
+                }
+            });
+
+            if ($('#classSelect').val()) {
+                $('#classSelect').trigger('change');
             }
         });
 

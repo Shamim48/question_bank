@@ -153,7 +153,7 @@
                 Student Registration
                 <span>Join as a participant</span>
             </a>
-            <a href="" class="btn core-team">
+            <a href="{{ route('registration.core.team') }}" class="btn core-team">
                 Core Team Registration
                 <span>Join our core team</span>
             </a>
