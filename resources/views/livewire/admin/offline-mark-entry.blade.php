@@ -1,4 +1,10 @@
 <div class="space-y-8 animate__animated animate__fadeIn">
+    @php
+        $u = auth()->user();
+        $canCreate = $u->isAdmin() || $u->hasPermission('offline-marks-create');
+        $canEdit   = $u->isAdmin() || $u->hasPermission('offline-marks-edit');
+        $canDelete = $u->isAdmin() || $u->hasPermission('offline-marks-delete');
+    @endphp
 
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -6,12 +12,14 @@
             <h2 class="text-3xl font-display font-bold text-gray-900 mb-2">Offline Marks Entry</h2>
             <p class="text-sm text-gray-400">Record marks given by multiple judges in offline events</p>
         </div>
+        @if($canCreate)
         <button wire:click="openForm" wire:loading.attr="disabled"
             class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50">
             <i data-lucide="plus-circle" class="w-5 h-5" wire:loading.remove wire:target="openForm"></i>
             <div wire:loading wire:target="openForm" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
             Add Mark
         </button>
+        @endif
     </div>
 
     <!-- Stats -->
@@ -97,18 +105,24 @@
                     </div>
 
                     <!-- Actions -->
+                    @if($canEdit || $canDelete)
                     <div class="lg:w-16 flex lg:flex-col gap-3 justify-end border-t lg:border-t-0 lg:border-l border-gray-100 pt-4 lg:pt-0 lg:pl-6">
+                        @if($canEdit)
                         <button wire:click="openForm({{ $mark->id }})"
                             class="w-10 h-10 bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-center text-indigo-500 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all" title="Edit">
                             <i data-lucide="edit-3" class="w-4 h-4"></i>
                         </button>
+                        @endif
+                        @if($canDelete)
                         <button wire:click="delete({{ $mark->id }})" wire:confirm="Delete this mark?"
                             wire:loading.attr="disabled" wire:target="delete({{ $mark->id }})"
                             class="w-10 h-10 bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all disabled:opacity-50" title="Delete">
                             <i data-lucide="trash-2" class="w-4 h-4" wire:loading.remove wire:target="delete({{ $mark->id }})"></i>
                             <div wire:loading wire:target="delete({{ $mark->id }})" class="w-4 h-4 border-2 border-red-300 border-t-red-500 rounded-full animate-spin"></div>
                         </button>
+                        @endif
                     </div>
+                    @endif
                 </div>
             </div>
         @empty

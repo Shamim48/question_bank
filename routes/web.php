@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\WebsiteController;
@@ -63,8 +64,19 @@ Route::post('/logout', function () {
 // Auth routes (provided by Breeze)
 require __DIR__ . '/auth.php';
 
-// Admin routes
+// Admin-only routes (full admin access required)
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/teams', [TeamController::class, 'index'])->name('admin.teams.index');
+    Route::post('/teams/{team}/approve', [TeamController::class, 'approve'])->name('admin.teams.approve');
+    Route::get('/teams/{team}/reject', [TeamController::class, 'reject'])->name('admin.teams.reject');
+
+    Route::get('/roles', function () {
+        return view('admin.roles');
+    })->name('admin.roles');
+});
+
+// Admin OR approved team member routes
+Route::middleware(['auth', 'team.or.admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');

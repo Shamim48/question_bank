@@ -1,4 +1,5 @@
 ﻿<div class="space-y-8 animate__animated animate__fadeIn">
+    @php $canCreate = auth()->user()->isAdmin() || auth()->user()->hasPermission('marks-create') @endphp
     <!-- Header -->
     <div>
         <h2 class="text-3xl font-display font-bold text-gray-900 mb-2">Performance Appraisal</h2>
@@ -86,10 +87,16 @@
                         @error('manual_marks') <span class="text-red-400 text-[10px]">{{ $message }}</span> @enderror
                     </div>
 
+                    @if($canCreate)
                     <button type="submit"
                         class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-all shadow-xl shadow-indigo-600/20 active:scale-95">
                         Commit Adjustment
                     </button>
+                    @else
+                    <div class="w-full py-4 bg-gray-100 rounded-2xl text-xs font-bold uppercase tracking-widest text-center text-gray-400 cursor-not-allowed">
+                        View Only — No Write Access
+                    </div>
+                    @endif
                 </form>
             </div>
         </div>

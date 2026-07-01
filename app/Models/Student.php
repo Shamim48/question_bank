@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ClassLevel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -82,7 +83,22 @@ class Student extends Model
   // Thana / Upazilla relationship
   public function thana()
   {
-    return $this->belongsTo(Thana::class, 'upazilla_id');
+    return $this->belongsTo(Thana::class, 'thana_id');
+  }
+
+  public function classLevel()
+  {
+    return $this->belongsTo(ClassLevel::class, 'class_id');
+  }
+
+  public function group()
+  {
+    return $this->belongsTo(\App\Models\Group::class, 'group_id');
+  }
+
+  public function season()
+  {
+    return $this->belongsTo(\App\Models\Season::class, 'season_id');
   }
 
 //   public function classModel()

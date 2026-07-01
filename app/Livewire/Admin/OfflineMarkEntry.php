@@ -2,16 +2,17 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\OfflineMark;
-use App\Models\User;
 use App\Models\Round;
 use App\Models\Subject;
+use App\Models\User;
+use App\Traits\AuthorizesWriteAction;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class OfflineMarkEntry extends Component
 {
-    use WithPagination;
+    use WithPagination, AuthorizesWriteAction;
 
     public $student_id = '';
     public $group_id = '';
@@ -40,6 +41,8 @@ class OfflineMarkEntry extends Component
 
     public function openForm($id = null)
     {
+        if (!$this->requireWrite($id ? 'offline-marks-edit' : 'offline-marks-create')) return;
+
         $this->resetValidation();
         if ($id) {
             $mark = OfflineMark::findOrFail($id);
@@ -75,6 +78,8 @@ class OfflineMarkEntry extends Component
 
     public function save()
     {
+        if (!$this->requireWrite($this->editingId ? 'offline-marks-edit' : 'offline-marks-create')) return;
+
         $this->validate();
 
         OfflineMark::updateOrCreate(
@@ -94,6 +99,8 @@ class OfflineMarkEntry extends Component
 
     public function delete($id)
     {
+        if (!$this->requireWrite('offline-marks-delete')) return;
+
         OfflineMark::findOrFail($id)->delete();
         session()->flash('message', 'Mark deleted!');
     }

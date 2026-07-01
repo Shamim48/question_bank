@@ -1,4 +1,5 @@
 <div class="space-y-10 animate__animated animate__fadeIn">
+    @php $canControl = auth()->user()->isAdmin() || auth()->user()->hasPermission('exams-control') @endphp
     <!-- Hero / Action Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -24,12 +25,18 @@
                                 {{ $loop->iteration }}</span>
                             <h3 class="text-xl font-display font-bold text-white">{{ $round->name }}</h3>
                         </div>
+                        @if($canControl)
                         <button wire:click="toggleRound({{ $round->id }})"
                             class="relative w-16 h-8 rounded-full transition-all duration-500 {{ $round->is_active ? 'bg-indigo-600 shadow-lg shadow-indigo-600/30' : 'bg-white/5 border border-white/10' }}">
                             <div
                                 class="absolute top-1 w-6 h-6 bg-white rounded-full transition-all duration-500 shadow-md {{ $round->is_active ? 'left-9' : 'left-1' }}">
                             </div>
                         </button>
+                        @else
+                        <div class="relative w-16 h-8 rounded-full {{ $round->is_active ? 'bg-indigo-600/50' : 'bg-white/5 border border-white/10' }} cursor-not-allowed opacity-60" title="No permission">
+                            <div class="absolute top-1 w-6 h-6 bg-white rounded-full shadow-md {{ $round->is_active ? 'left-9' : 'left-1' }}"></div>
+                        </div>
+                        @endif
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 mb-8">

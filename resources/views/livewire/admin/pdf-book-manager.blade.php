@@ -1,4 +1,10 @@
 ﻿<div class="space-y-8 animate__animated animate__fadeIn">
+    @php
+        $u = auth()->user();
+        $canCreate = $u->isAdmin() || $u->hasPermission('pdf-books-create');
+        $canEdit   = $u->isAdmin() || $u->hasPermission('pdf-books-edit');
+        $canDelete = $u->isAdmin() || $u->hasPermission('pdf-books-delete');
+    @endphp
     <!-- Header Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -6,12 +12,14 @@
             <p class="text-sm text-gray-400">Manage learning materials assigned by group and round</p>
         </div>
         <div class="flex items-center gap-4">
+            @if($canCreate)
             <button wire:click="openForm" wire:loading.attr="disabled"
                 class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50">
                 <i data-lucide="upload-cloud" class="w-5 h-5" wire:loading.remove wire:target="openForm"></i>
                 <div wire:loading wire:target="openForm" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 Upload PDF Book
             </button>
+            @endif
         </div>
     </div>
 
@@ -77,15 +85,19 @@
                        class="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-white rounded-xl text-sm font-medium transition-all text-center">
                         <i data-lucide="eye" class="w-4 h-4 inline-block mr-1"></i> View
                     </a>
+                    @if($canEdit)
                     <button wire:click="openForm({{ $book->id }})" class="w-10 h-10 bg-white/5 hover:bg-white/10 text-indigo-400 rounded-xl flex items-center justify-center transition-all">
                         <i data-lucide="edit-3" class="w-4 h-4"></i>
                     </button>
-                    <button wire:click="delete({{ $book->id }})" wire:confirm="Are you sure you want to delete this book?" 
+                    @endif
+                    @if($canDelete)
+                    <button wire:click="delete({{ $book->id }})" wire:confirm="Are you sure you want to delete this book?"
                             wire:loading.attr="disabled" wire:target="delete({{ $book->id }})"
                             class="w-10 h-10 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-xl flex items-center justify-center transition-all disabled:opacity-50">
                         <i data-lucide="trash-2" class="w-4 h-4" wire:loading.remove wire:target="delete({{ $book->id }})"></i>
                         <div wire:loading wire:target="delete({{ $book->id }})" class="w-4 h-4 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin"></div>
                     </button>
+                    @endif
                 </div>
             </div>
         @empty

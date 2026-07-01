@@ -2,18 +2,19 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\Question;
-use App\Models\Option;
-use App\Models\Subject;
-use App\Models\Round;
 use App\Models\Group;
+use App\Models\Option;
+use App\Models\Question;
+use App\Models\Round;
+use App\Models\Subject;
+use App\Traits\AuthorizesWriteAction;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class QuestionBank extends Component
 {
-    use WithFileUploads, WithPagination;
+    use WithFileUploads, WithPagination, AuthorizesWriteAction;
 
     public $subject_id = '';
     public $group_id = '';
@@ -81,6 +82,8 @@ class QuestionBank extends Component
 
     public function openForm($id = null)
     {
+        if (!$this->requireWrite($id ? 'questions-edit' : 'questions-create')) return;
+
         $this->resetValidation();
         if ($id) {
             $question = Question::with('options', 'rounds')->findOrFail($id);
@@ -122,6 +125,8 @@ class QuestionBank extends Component
 
     public function save()
     {
+        if (!$this->requireWrite($this->editingId ? 'questions-edit' : 'questions-create')) return;
+
         $this->validate();
 
         // Handle media file upload
@@ -165,6 +170,8 @@ class QuestionBank extends Component
 
     public function delete($id)
     {
+        if (!$this->requireWrite('questions-delete')) return;
+
         Question::findOrFail($id)->delete();
         session()->flash('message', 'Question deleted!');
     }

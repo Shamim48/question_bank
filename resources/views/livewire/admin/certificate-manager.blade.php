@@ -1,4 +1,9 @@
 ﻿<div class="space-y-8 animate__animated animate__fadeIn">
+    @php
+        $u = auth()->user();
+        $canCreate = $u->isAdmin() || $u->hasPermission('certificates-create');
+        $canDelete = $u->isAdmin() || $u->hasPermission('certificates-delete');
+    @endphp
     <!-- Header Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -15,6 +20,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <!-- Generation Module -->
+        @if($canCreate)
         <div class="lg:col-span-4 lg:sticky lg:top-8 self-start">
             <div class="glass-card rounded-[2.5rem] p-8 lg:p-10 border border-white/5 relative overflow-hidden">
                 <div class="relative z-10">
@@ -77,9 +83,10 @@
                 <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-indigo-600/5 rounded-full blur-3xl"></div>
             </div>
         </div>
+        @endif
 
         <!-- Registry List -->
-        <div class="lg:col-span-8">
+        <div class="{{ $canCreate ? 'lg:col-span-8' : 'lg:col-span-12' }}">
             <div class="glass-card rounded-[2.5rem] p-8 lg:p-10 border border-white/5">
                 <div class="flex items-center justify-between mb-10">
                     <h3 class="text-xl font-display font-bold text-white">Historical Records</h3>
@@ -123,6 +130,7 @@
                                         class="flex items-center gap-2 px-4 py-2.5 bg-indigo-600/10 hover:bg-indigo-600 text-indigo-400 hover:text-white rounded-xl text-[10px] font-bold uppercase transition-all">
                                         <i data-lucide="download" class="w-3 h-3"></i> Download
                                     </a>
+                                    @if($canDelete)
                                     <button wire:click="delete({{ $cert->id }})"
                                         wire:confirm="Revoke this certificate permanently?"
                                         wire:loading.attr="disabled" wire:target="delete({{ $cert->id }})"
@@ -130,6 +138,7 @@
                                         <i data-lucide="trash-2" class="w-4 h-4" wire:loading.remove wire:target="delete({{ $cert->id }})"></i>
                                         <div wire:loading wire:target="delete({{ $cert->id }})" class="w-4 h-4 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin"></div>
                                     </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>

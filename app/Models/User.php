@@ -20,6 +20,7 @@ class User extends Authenticatable
         'phone',
         'division',
         'district',
+        'permissions',
     ];
 
     protected $hidden = [
@@ -31,7 +32,8 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
+            'permissions'       => 'array',
         ];
     }
 
@@ -43,6 +45,28 @@ class User extends Authenticatable
     public function isStudent(): bool
     {
         return $this->role === 'student';
+    }
+
+    public function isTeam(): bool
+    {
+        return !$this->isAdmin() && !$this->isStudent();
+    }
+
+    public function hasPermission(string $routeName): bool
+    {
+        if ($this->isAdmin()) return true;
+
+        static $roleCache = [];
+
+        if (!isset($roleCache[$this->role])) {
+            $roleCache[$this->role] = Role::with('permissions')
+                ->where('name', $this->role)
+                ->first();
+        }
+
+        $role = $roleCache[$this->role];
+
+        return $role && $role->hasPermission($routeName);
     }
 
     public function exams()
@@ -63,5 +87,10 @@ class User extends Authenticatable
     public function student()
     {
         return $this->hasOne(Student::class, 'user_id');
+    }
+
+    public function team()
+    {
+        return $this->hasOne(\App\Models\Team::class, 'user_id');
     }
 }

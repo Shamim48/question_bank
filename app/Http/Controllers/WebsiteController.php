@@ -7,7 +7,9 @@ use App\Models\District;
 use App\Models\Division;
 use App\Models\Group;
 use App\Models\Season;
+use App\Models\Role;
 use App\Models\Student;
+use App\Models\Team;
 use App\Models\Thana;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -98,7 +100,7 @@ class WebsiteController extends Controller
 
     public function teamRegistrationForm()
     {
-        $roles     = ['Coordinator', 'Mentor', 'Volunteer', 'Ambassador', 'Moderator'];
+        $roles     = Role::teamRoles();
         $seasons   = Season::where('status', 1)->get();
         $divisions = Division::all();
         $districts = District::all();
@@ -115,22 +117,20 @@ class WebsiteController extends Controller
             'image'            => 'required|image|max:2048',
             'email'            => 'required|email|unique:users,email',
             'phone'            => ['nullable', 'regex:/^(?:\+880|880|0)1[3-9]\d{8}$/'],
-            'whatsapp'         => ['nullable', 'regex:/^(?:\+880|880|0)1[3-9]\d{8}$/'],
-            'institute_mobile' => ['nullable', 'regex:/^(?:\+880|880|0)1[3-9]\d{8}$/'],
-            'season_id'        => 'required',
+            'whatsapp'         => ['nullable', 'string', 'max:20'],
+            'telegram'         => ['nullable', 'string', 'max:20'],
+            'institute_mobile' => ['nullable', 'string', 'max:20'],
+            'institute_email'  => ['nullable', 'email', 'max:100'],
+            'season_id'        => 'required|exists:seasons,id',
+            'role'             => 'required|exists:roles,name',
             'password'         => ['required', 'confirmed', Password::min(6)],
-            'role'             => 'required|string',
         ]);
 
         try {
             DB::beginTransaction();
 
-            $imagePath = null;
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('uploads/team', 'public');
-            }
-
-            $name = trim($request->first_name . ' ' . $request->last_name);
+            $imagePath = $request->file('image')->store('uploads/team', 'public');
+            $name      = trim($request->first_name . ' ' . $request->last_name);
 
             $user = User::create([
                 'name'     => $name,
@@ -140,25 +140,33 @@ class WebsiteController extends Controller
                 'role'     => $request->role,
             ]);
 
-            // Store extra team member info in student table (repurposed for pending team)
-            Student::create([
-                'user_id'        => $user->id,
-                'student_id'     => 'TEAM' . str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT),
-                'institute_name' => $request->institute_name,
-                'division_id'    => $request->division_id,
-                'district_id'    => $request->district_id,
-                'upazilla_id'    => $request->upazilla_id,
-                'address'        => $request->address,
-                'status'         => 0,
+            Team::create([
+                'user_id'          => $user->id,
+                'season_id'        => $request->season_id,
+                'role'             => $request->role,
+                'image'            => $imagePath,
+                'whatsapp'         => $request->whatsapp,
+                'telegram'         => $request->telegram,
+                'institute_name'   => $request->institute_name,
+                'designation'      => $request->designation,
+                'department'       => $request->department,
+                'institute_mobile' => $request->institute_mobile,
+                'institute_email'  => $request->institute_email,
+                'eiin_no'          => $request->eiin_no,
+                'division_id'      => $request->division_id,
+                'district_id'      => $request->district_id,
+                'thana_id'         => $request->upazilla_id,
+                'address'          => $request->address,
+                'status'           => 0,
             ]);
 
             DB::commit();
 
-            return redirect()->route('user.login')
-                ->with('success', 'Registration successful! Your account is pending approval.');
+            return redirect()->route('login')
+                ->with('success', 'Registration successful! Your account is pending admin approval.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Registration Failed! Please try again.');
+            return redirect()->back()->with('error', 'Registration failed! Please try again.');
         }
     }
 
@@ -194,6 +202,13 @@ class WebsiteController extends Controller
         }
 
         if ($user && Hash::check($password, $user->password)) {
+            // Block pending team members
+            if ($user->isTeam() && !$user->team?->isApproved()) {
+                return back()->withErrors([
+                    'login' => 'Your account is pending admin approval. Please wait.',
+                ])->withInput();
+            }
+
             Auth::login($user, $remember);
             $request->session()->regenerate();
 
@@ -209,7 +224,7 @@ class WebsiteController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->isAdmin()) {
+        if ($user->isAdmin() || $user->isTeam()) {
             return redirect()->route('admin.dashboard');
         }
 
@@ -222,7 +237,7 @@ class WebsiteController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('user.login')
+        return redirect()->route('login')
             ->with('success', 'You have been logged out successfully.');
     }
 }

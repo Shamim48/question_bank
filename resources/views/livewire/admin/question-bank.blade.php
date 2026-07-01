@@ -1,4 +1,10 @@
 ﻿<div class="space-y-8 animate__animated animate__fadeIn">
+    @php
+        $u = auth()->user();
+        $canCreate = $u->isAdmin() || $u->hasPermission('questions-create');
+        $canEdit   = $u->isAdmin() || $u->hasPermission('questions-edit');
+        $canDelete = $u->isAdmin() || $u->hasPermission('questions-delete');
+    @endphp
     <!-- Header Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -6,12 +12,14 @@
             <p class="text-sm text-gray-400">Manage and organize your MCQ ecosystem</p>
         </div>
         <div class="flex items-center gap-4">
+            @if($canCreate)
             <button wire:click="openForm" wire:loading.attr="disabled"
                 class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50">
                 <i data-lucide="plus-circle" class="w-5 h-5" wire:loading.remove wire:target="openForm"></i>
                 <div wire:loading wire:target="openForm" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 New Question
             </button>
+            @endif
         </div>
     </div>
 
@@ -135,17 +143,23 @@
                     </div>
 
                     <!-- Actions Panel -->
+                    @if($canEdit || $canDelete)
                     <div class="lg:w-12 flex lg:flex-col gap-3 justify-end lg:justify-start border-t lg:border-t-0 lg:border-l border-white/5 pt-6 lg:pt-0 lg:pl-6">
+                        @if($canEdit)
                         <button wire:click="openForm({{ $question->id }})" class="w-10 h-10 glass rounded-xl flex items-center justify-center text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all" title="Edit">
                             <i data-lucide="edit-3" class="w-5 h-5"></i>
                         </button>
-                        <button wire:click="delete({{ $question->id }})" wire:confirm="Delete this question?" 
+                        @endif
+                        @if($canDelete)
+                        <button wire:click="delete({{ $question->id }})" wire:confirm="Delete this question?"
                                 wire:loading.attr="disabled" wire:target="delete({{ $question->id }})"
                                 class="w-10 h-10 glass rounded-xl flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all disabled:opacity-50" title="Delete">
                             <i data-lucide="trash-2" class="w-5 h-5" wire:loading.remove wire:target="delete({{ $question->id }})"></i>
                             <div wire:loading wire:target="delete({{ $question->id }})" class="w-5 h-5 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin"></div>
                         </button>
+                        @endif
                     </div>
+                    @endif
                 </div>
             </div>
         @empty

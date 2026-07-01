@@ -46,6 +46,7 @@
         }
     </style>
 
+    <link href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" rel="stylesheet">
     @livewireStyles
 </head>
 
@@ -71,6 +72,24 @@
     <p class="mt-8 text-xs text-gray-400">&copy; {{ date('Y') }} QuestionBank. All rights reserved.</p>
 
     @livewireScripts
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+    <script>
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-top-right',
+            timeOut: 4000,
+        };
+
+        @if (session('success'))
+            toastr.success('{{ session('success') }}');
+        @endif
+
+        @if (session('error'))
+            toastr.error('{{ session('error') }}');
+        @endif
+    </script>
 </body>
 
 </html>

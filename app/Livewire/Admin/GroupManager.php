@@ -3,27 +3,32 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Group;
+use App\Traits\AuthorizesWriteAction;
 use Livewire\Component;
 
 class GroupManager extends Component
 {
+    use AuthorizesWriteAction;
+
     public $name = '';
     public $description = '';
     public $editingId = null;
     public $showForm = false;
 
     protected $rules = [
-        'name' => 'required|string|max:255',
+        'name'        => 'required|string|max:255',
         'description' => 'nullable|string',
     ];
 
     public function openForm($id = null)
     {
+        if (!$this->requireWrite($id ? 'groups-edit' : 'groups-create')) return;
+
         $this->resetValidation();
         if ($id) {
-            $group = Group::findOrFail($id);
-            $this->editingId = $group->id;
-            $this->name = $group->name;
+            $group             = Group::findOrFail($id);
+            $this->editingId   = $group->id;
+            $this->name        = $group->name;
             $this->description = $group->description ?? '';
         } else {
             $this->reset(['editingId', 'name', 'description']);
@@ -39,12 +44,14 @@ class GroupManager extends Component
 
     public function save()
     {
+        if (!$this->requireWrite($this->editingId ? 'groups-edit' : 'groups-create')) return;
+
         $this->validate();
 
         Group::updateOrCreate(
             ['id' => $this->editingId],
             [
-                'name' => $this->name,
+                'name'        => $this->name,
                 'description' => $this->description,
             ]
         );
@@ -55,6 +62,8 @@ class GroupManager extends Component
 
     public function delete($id)
     {
+        if (!$this->requireWrite('groups-delete')) return;
+
         Group::findOrFail($id)->delete();
         session()->flash('success', 'Group deleted!');
     }

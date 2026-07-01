@@ -1,16 +1,24 @@
 ﻿<div class="space-y-8 animate__animated animate__fadeIn">
+    @php
+        $u = auth()->user();
+        $canCreate = $u->isAdmin() || $u->hasPermission('rounds-create');
+        $canEdit   = $u->isAdmin() || $u->hasPermission('rounds-edit');
+        $canDelete = $u->isAdmin() || $u->hasPermission('rounds-delete');
+    @endphp
     <!-- Header Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
             <h2 class="text-3xl font-display font-bold text-white mb-2">Competition Rounds</h2>
             <p class="text-sm text-gray-400">Orchestrate the progression of your competitive events</p>
         </div>
+        @if($canCreate)
         <button wire:click="openForm" wire:loading.attr="disabled"
             class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50">
             <i data-lucide="plus-circle" class="w-5 h-5" wire:loading.remove wire:target="openForm"></i>
             <div wire:loading wire:target="openForm" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
             New Round
         </button>
+        @endif
     </div>
 
     <!-- Stats Snapshot -->
@@ -102,6 +110,7 @@
                             </div>
                         </td>
                         <td class="py-6 px-8">
+                            @if($canEdit)
                             <button wire:click="toggleActive({{ $round->id }})"
                                 class="flex items-center gap-2 group/toggle">
                                 <div
@@ -115,23 +124,36 @@
                                     {{ $round->is_active ? 'Online' : 'Offline' }}
                                 </span>
                             </button>
+                            @else
+                            <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase {{ $round->is_active ? 'text-indigo-400' : 'text-gray-600' }}">
+                                {{ $round->is_active ? 'Online' : 'Offline' }}
+                            </span>
+                            @endif
                         </td>
                         <td class="py-6 px-8 text-right">
+                            @if($canEdit || $canDelete)
                             <div
                                 class="flex items-center justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
+                                @if($canEdit)
                                 <button wire:click="openForm({{ $round->id }})"
                                     class="p-2 hover:bg-white/5 rounded-lg text-indigo-400 transition-colors"
                                     title="Edit Configuration">
                                     <i data-lucide="pen" class="w-4 h-4"></i>
                                 </button>
-                                 <button wire:click="delete({{ $round->id }})" wire:confirm="Eliminate this round?"
+                                @endif
+                                @if($canDelete)
+                                <button wire:click="delete({{ $round->id }})" wire:confirm="Eliminate this round?"
                                     wire:loading.attr="disabled" wire:target="delete({{ $round->id }})"
                                     class="p-2 hover:bg-white/5 rounded-lg text-red-500 transition-colors disabled:opacity-50"
                                     title="Remove Entry">
                                     <i data-lucide="trash-2" class="w-4 h-4" wire:loading.remove wire:target="delete({{ $round->id }})"></i>
                                     <div wire:loading wire:target="delete({{ $round->id }})" class="w-4 h-4 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin"></div>
                                 </button>
+                                @endif
                             </div>
+                            @else
+                            <span class="text-xs text-gray-600">View only</span>
+                            @endif
                         </td>
                     </tr>
                 @empty

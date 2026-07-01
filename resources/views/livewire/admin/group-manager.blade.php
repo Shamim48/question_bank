@@ -1,16 +1,24 @@
 ﻿<div class="space-y-8 animate__animated animate__fadeIn">
+    @php
+        $u = auth()->user();
+        $canCreate = $u->isAdmin() || $u->hasPermission('groups-create');
+        $canEdit   = $u->isAdmin() || $u->hasPermission('groups-edit');
+        $canDelete = $u->isAdmin() || $u->hasPermission('groups-delete');
+    @endphp
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
             <h2 class="text-3xl font-display font-bold text-white mb-2">Group Manager</h2>
             <p class="text-sm text-gray-400">Manage participant groups and access levels</p>
         </div>
+        @if($canCreate)
         <button wire:click="openForm" wire:loading.attr="disabled"
             class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50">
             <i data-lucide="plus-circle" class="w-5 h-5" wire:loading.remove wire:target="openForm"></i>
             <div wire:loading wire:target="openForm" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
             New Group
         </button>
+        @endif
     </div>
 
     <!-- Content Table -->
@@ -48,18 +56,26 @@
                             </div>
                         </td>
                         <td class="py-5 px-8 text-right">
+                            @if($canEdit || $canDelete)
                             <div class="flex items-center justify-end gap-2">
+                                @if($canEdit)
                                 <button wire:click="openForm({{ $group->id }})"
                                     class="w-9 h-9 glass rounded-lg flex items-center justify-center text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all">
                                     <i data-lucide="edit-3" class="w-4 h-4"></i>
                                 </button>
+                                @endif
+                                @if($canDelete)
                                 <button wire:click="delete({{ $group->id }})" wire:confirm="Delete this group?"
                                     wire:loading.attr="disabled" wire:target="delete({{ $group->id }})"
                                     class="w-9 h-9 glass rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all disabled:opacity-50">
                                     <i data-lucide="trash-2" class="w-4 h-4" wire:loading.remove wire:target="delete({{ $group->id }})"></i>
                                     <div wire:loading wire:target="delete({{ $group->id }})" class="w-4 h-4 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin"></div>
                                 </button>
+                                @endif
                             </div>
+                            @else
+                            <span class="text-xs text-gray-600">View only</span>
+                            @endif
                         </td>
                     </tr>
                 @empty

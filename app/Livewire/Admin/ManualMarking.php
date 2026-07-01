@@ -3,13 +3,15 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Mark;
-use App\Models\User;
 use App\Models\Round;
 use App\Models\Subject;
+use App\Models\User;
+use App\Traits\AuthorizesWriteAction;
 use Livewire\Component;
 
 class ManualMarking extends Component
 {
+    use AuthorizesWriteAction;
     public $user_id = '';
     public $round_id = '';
     public $subject_id = '';
@@ -41,6 +43,8 @@ class ManualMarking extends Component
 
     public function save()
     {
+        if (!$this->requireWrite('marks-create')) return;
+
         $this->validate();
 
         $mark = Mark::updateOrCreate(

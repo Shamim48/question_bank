@@ -207,32 +207,44 @@
             <!-- Navigation -->
             <nav class="flex-1 px-4 py-8 space-y-2 overflow-y-auto no-scrollbar">
                 @php
-                    $isAdmin = auth()->check() && auth()->user()->role === 'admin';
-                    
+                    $authUser = auth()->user();
+                    $isAdmin  = $authUser?->isAdmin();
+                    $isTeam   = $authUser?->isTeam();
+
+                    $allAdminItems = [
+                        ['route' => 'admin.dashboard',      'icon' => 'layout-dashboard',  'label' => 'Dashboard',      'permission' => 'dashboard-access'],
+                        ['route' => 'admin.rounds',         'icon' => 'layers',            'label' => 'Exam Rounds',    'permission' => 'rounds-list'],
+                        ['route' => 'admin.subjects',       'icon' => 'book-open',         'label' => 'Subjects',       'permission' => 'subjects-list'],
+                        ['route' => 'admin.groups',         'icon' => 'users',             'label' => 'Groups',         'permission' => 'groups-list'],
+                        ['route' => 'admin.questions',      'icon' => 'database',          'label' => 'Question Bank',  'permission' => 'questions-list'],
+                        ['route' => 'admin.exams',          'icon' => 'activity',          'label' => 'Exam Control',   'permission' => 'exams-list'],
+                        ['route' => 'admin.marks',          'icon' => 'award',             'label' => 'Manual Marks',   'permission' => 'marks-list'],
+                        ['route' => 'admin.offline-marks',  'icon' => 'clipboard-check',   'label' => 'Offline Marks',  'permission' => 'offline-marks-list'],
+                        ['route' => 'admin.certificates',   'icon' => 'scroll',            'label' => 'Certificates',   'permission' => 'certificates-list'],
+                        ['route' => 'admin.pdf-books',      'icon' => 'book',              'label' => 'PDF Books',      'permission' => 'pdf-books-list'],
+                        ['route' => 'ambassadors',          'icon' => 'star',              'label' => 'Ambassadors',    'permission' => 'ambassadors-list'],
+                        ['route' => 'admin.seasons.index',  'icon' => 'calendar',          'label' => 'Seasons',        'permission' => 'seasons-list', 'activePattern' => 'admin.seasons*'],
+                        ['route' => 'admin.teams.index',    'icon' => 'shield-check',      'label' => 'Team Members',   'adminOnly' => true],
+                        ['route' => 'admin.roles',          'icon' => 'tag',               'label' => 'Roles',          'adminOnly' => true],
+                        ['route' => 'admin.profile',        'icon' => 'user-round',        'label' => 'My Profile',     'permission' => 'profile-access'],
+                    ];
+
                     if ($isAdmin) {
-                        $navItems = [
-                            ['route' => 'admin.dashboard', 'icon' => 'layout-dashboard', 'label' => 'Dashboard'],
-                            ['route' => 'admin.rounds', 'icon' => 'layers', 'label' => 'Exam Rounds'],
-                            ['route' => 'admin.subjects', 'icon' => 'book-open', 'label' => 'Subjects'],
-                            ['route' => 'admin.groups', 'icon' => 'users', 'label' => 'Groups'],
-                            ['route' => 'admin.questions', 'icon' => 'database', 'label' => 'Question Bank'],
-                            ['route' => 'admin.exams', 'icon' => 'activity', 'label' => 'Exam Control'],
-                            ['route' => 'admin.marks', 'icon' => 'award', 'label' => 'Manual Marks'],
-                            ['route' => 'admin.offline-marks', 'icon' => 'clipboard-check', 'label' => 'Offline Marks'],
-                            ['route' => 'admin.certificates', 'icon' => 'scroll', 'label' => 'Certificates'],
-                            ['route' => 'admin.pdf-books', 'icon' => 'book', 'label' => 'PDF Books'],
-                            ['route' => 'ambassadors', 'icon' => 'users', 'label' => 'Ambassadors'],
-                            ['route' => 'admin.seasons.index', 'icon' => 'calendar', 'label' => 'Seasons', 'activePattern' => 'admin.seasons*'],
-                            ['route' => 'admin.profile', 'icon' => 'user-round', 'label' => 'My Profile'],
-                        ];
+                        $navItems = $allAdminItems;
+                    } elseif ($isTeam) {
+                        $navItems = array_filter($allAdminItems, function($item) use ($authUser) {
+                            if (!empty($item['adminOnly'])) return false;
+                            $perm = $item['permission'] ?? null;
+                            return $perm && $authUser->hasPermission($perm);
+                        });
                     } else {
                         $navItems = [
-                            ['route' => 'student.dashboard', 'icon' => 'layout-dashboard', 'label' => 'Dashboard'],
-                            ['route' => 'student.exams', 'icon' => 'activity', 'label' => 'Exams'],
-                            ['route' => 'student.results', 'icon' => 'award', 'label' => 'Results'],
-                            ['route' => 'student.certificates', 'icon' => 'scroll', 'label' => 'Certificates'],
-                            ['route' => 'student.pdf-books', 'icon' => 'book', 'label' => 'PDF Books'],
-                            ['route' => 'student.profile', 'icon' => 'user-round', 'label' => 'My Profile'],
+                            ['route' => 'student.dashboard',    'icon' => 'layout-dashboard', 'label' => 'Dashboard'],
+                            ['route' => 'student.exams',        'icon' => 'activity',         'label' => 'Exams'],
+                            ['route' => 'student.results',      'icon' => 'award',            'label' => 'Results'],
+                            ['route' => 'student.certificates', 'icon' => 'scroll',           'label' => 'Certificates'],
+                            ['route' => 'student.pdf-books',    'icon' => 'book',             'label' => 'PDF Books'],
+                            ['route' => 'student.profile',      'icon' => 'user-round',       'label' => 'My Profile'],
                         ];
                     }
                 @endphp
@@ -316,7 +328,7 @@
                                 </div>
                                 <div class="h-px bg-gray-100 my-1"></div>
 
-                                @if(auth()->user()->isAdmin())
+                                @if(auth()->user()->isAdmin() || auth()->user()->isTeam())
                                     <a href="{{ route('admin.profile') }}"
                                         class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-sm font-medium transition-colors text-black">
                                         <i data-lucide="user-round" class="w-4 h-4 text-gray-500"></i> My Profile

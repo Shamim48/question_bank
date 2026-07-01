@@ -7,6 +7,7 @@
     <title>Core Team Registration</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" rel="stylesheet">
     <style>
         :root {
             --primary: #1f4f86;
@@ -293,29 +294,7 @@
     @include('website.components.header')
 
     <main class="container">
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul style="padding-left: 16px;">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <div class="title">
+            <div class="title">
             <h2>Core Team Registration</h2>
             <p>Join Our Core Team</p>
         </div>
@@ -440,8 +419,8 @@
                             <select name="role" required>
                                 <option value="">Select Role</option>
                                 @foreach ($roles as $role)
-                                    <option value="{{ $role }}" {{ old('role') == $role ? 'selected' : '' }}>
-                                        {{ $role }}
+                                    <option value="{{ $role->name }}" {{ old('role') == $role->name ? 'selected' : '' }}>
+                                        {{ $role->display_name ?? $role->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -519,7 +498,16 @@
     @include('website.components.footer')
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        toastr.options = { closeButton: true, progressBar: true, positionClass: 'toast-top-right', timeOut: 4000 };
+        @if(session('success')) toastr.success('{{ session('success') }}'); @endif
+        @if(session('error'))   toastr.error('{{ session('error') }}');   @endif
+        @if($errors->any())
+            @foreach($errors->all() as $error) toastr.error('{{ $error }}'); @endforeach
+        @endif
+    </script>
 
     <script>
         $(document).ready(function () {

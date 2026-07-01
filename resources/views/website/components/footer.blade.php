@@ -56,7 +56,7 @@
             <h4>Quick Links</h4>
             <a href="{{ url('/') }}">Home</a>
             <a href="{{ route('registration.index') }}">Register</a>
-            <a href="{{ route('user.login') }}">Login</a>
+            <a href="{{ route('login') }}">Login</a>
         </div>
 
         <div>
