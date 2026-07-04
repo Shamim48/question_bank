@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\TeamController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\WebsiteController;
@@ -66,9 +67,13 @@ require __DIR__ . '/auth.php';
 
 // Admin-only routes (full admin access required)
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/teams', [TeamController::class, 'index'])->name('admin.teams.index');
-    Route::post('/teams/{team}/approve', [TeamController::class, 'approve'])->name('admin.teams.approve');
-    Route::get('/teams/{team}/reject', [TeamController::class, 'reject'])->name('admin.teams.reject');
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
+
+    Route::get('/users/pending', [TeamController::class, 'pending'])->name('admin.users.pending');
+    Route::post('/users/{team}/approve', [TeamController::class, 'approve'])->name('admin.users.approve');
+    Route::get('/users/{team}/reject', [TeamController::class, 'reject'])->name('admin.users.reject');
 
     Route::get('/roles', function () {
         return view('admin.roles');
@@ -92,6 +97,14 @@ Route::middleware(['auth', 'team.or.admin'])->prefix('admin')->group(function ()
     Route::get('/groups', function () {
         return view('admin.groups');
     })->name('admin.groups');
+
+    Route::get('/class-levels', function () {
+        return view('admin.class-levels');
+    })->name('admin.class-levels');
+
+    Route::get('/participants', function () {
+        return view('admin.participants');
+    })->name('admin.participants');
 
     Route::get('/questions', function () {
         return view('admin.questions');

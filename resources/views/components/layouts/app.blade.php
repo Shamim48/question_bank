@@ -212,10 +212,14 @@
                     $isTeam   = $authUser?->isTeam();
 
                     $allAdminItems = [
+                        ['route' => 'admin.profile',        'icon' => 'user-round',        'label' => 'My Profile',     'permission' => 'profile-access'],
                         ['route' => 'admin.dashboard',      'icon' => 'layout-dashboard',  'label' => 'Dashboard',      'permission' => 'dashboard-access'],
-                        ['route' => 'admin.rounds',         'icon' => 'layers',            'label' => 'Exam Rounds',    'permission' => 'rounds-list'],
                         ['route' => 'admin.subjects',       'icon' => 'book-open',         'label' => 'Subjects',       'permission' => 'subjects-list'],
                         ['route' => 'admin.groups',         'icon' => 'users',             'label' => 'Groups',         'permission' => 'groups-list'],
+                        ['route' => 'admin.seasons.index',  'icon' => 'calendar',          'label' => 'Seasons',        'permission' => 'seasons-list', 'activePattern' => 'admin.seasons*'],
+                        ['route' => 'admin.class-levels',   'icon' => 'graduation-cap',    'label' => 'Classes',        'permission' => 'class-levels-list'],
+                        ['route' => 'admin.participants',   'icon' => 'user-check',        'label' => 'Participant Management', 'permission' => 'participants-list'],
+                        ['route' => 'admin.rounds',         'icon' => 'layers',            'label' => 'Exam Rounds',    'permission' => 'rounds-list'],
                         ['route' => 'admin.questions',      'icon' => 'database',          'label' => 'Question Bank',  'permission' => 'questions-list'],
                         ['route' => 'admin.exams',          'icon' => 'activity',          'label' => 'Exam Control',   'permission' => 'exams-list'],
                         ['route' => 'admin.marks',          'icon' => 'award',             'label' => 'Manual Marks',   'permission' => 'marks-list'],
@@ -223,10 +227,18 @@
                         ['route' => 'admin.certificates',   'icon' => 'scroll',            'label' => 'Certificates',   'permission' => 'certificates-list'],
                         ['route' => 'admin.pdf-books',      'icon' => 'book',              'label' => 'PDF Books',      'permission' => 'pdf-books-list'],
                         ['route' => 'ambassadors',          'icon' => 'star',              'label' => 'Ambassadors',    'permission' => 'ambassadors-list'],
-                        ['route' => 'admin.seasons.index',  'icon' => 'calendar',          'label' => 'Seasons',        'permission' => 'seasons-list', 'activePattern' => 'admin.seasons*'],
-                        ['route' => 'admin.teams.index',    'icon' => 'shield-check',      'label' => 'Team Members',   'adminOnly' => true],
-                        ['route' => 'admin.roles',          'icon' => 'tag',               'label' => 'Roles',          'adminOnly' => true],
-                        ['route' => 'admin.profile',        'icon' => 'user-round',        'label' => 'My Profile',     'permission' => 'profile-access'],
+                        [
+                            'type'      => 'dropdown',
+                            'icon'      => 'shield-check',
+                            'label'     => 'User Management',
+                            'adminOnly' => true,
+                            'children'  => [
+                                ['route' => 'admin.users.create',  'icon' => 'user-plus', 'label' => 'Add User'],
+                                ['route' => 'admin.users.index',   'icon' => 'users',      'label' => 'User List'],
+                                ['route' => 'admin.users.pending', 'icon' => 'clock',      'label' => 'Pending User'],
+                                ['route' => 'admin.roles',         'icon' => 'tag',        'label' => 'Roles'],
+                            ],
+                        ],
                     ];
 
                     if ($isAdmin) {
@@ -250,14 +262,38 @@
                 @endphp
 
                 @foreach($navItems as $item)
-                    @php $isActive = request()->routeIs($item['activePattern'] ?? $item['route']); @endphp
-                    <a href="{{ route($item['route']) }}"
-                        class="sidebar-item group flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium hover:text-indigo-700 transition-all {{ $isActive ? 'active' : 'text-gray-600 hover:bg-indigo-50' }}"
-                        :title="sidebarCollapsed ? '{{ $item['label'] }}' : ''">
-                        <i data-lucide="{{ $item['icon'] }}"
-                            class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110"></i>
-                        <span x-show="!sidebarCollapsed" x-transition:enter.delay.100ms x-cloak>{{ $item['label'] }}</span>
-                    </a>
+                    @if(($item['type'] ?? null) === 'dropdown')
+                        @php $childActive = collect($item['children'])->contains(fn($c) => request()->routeIs($c['route'])); @endphp
+                        <div x-data="{ open: {{ $childActive ? 'true' : 'false' }} }">
+                            <button type="button" @click="open = !open"
+                                class="sidebar-item w-full group flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium hover:text-indigo-700 transition-all {{ $childActive ? 'active' : 'text-gray-600 hover:bg-indigo-50' }}"
+                                :title="sidebarCollapsed ? '{{ $item['label'] }}' : ''">
+                                <i data-lucide="{{ $item['icon'] }}"
+                                    class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110"></i>
+                                <span x-show="!sidebarCollapsed" x-transition:enter.delay.100ms x-cloak class="flex-1 text-left">{{ $item['label'] }}</span>
+                                <i data-lucide="chevron-down" x-show="!sidebarCollapsed" x-cloak
+                                    class="w-4 h-4 shrink-0 transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                            </button>
+                            <div x-show="open && !sidebarCollapsed" x-cloak class="pl-6 mt-1 space-y-1">
+                                @foreach($item['children'] as $child)
+                                    <a href="{{ route($child['route']) }}"
+                                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs($child['route']) ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-500 hover:bg-indigo-50 hover:text-indigo-700' }}">
+                                        <i data-lucide="{{ $child['icon'] }}" class="w-4 h-4 shrink-0"></i>
+                                        {{ $child['label'] }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                        @php $isActive = request()->routeIs($item['activePattern'] ?? $item['route']); @endphp
+                        <a href="{{ route($item['route']) }}"
+                            class="sidebar-item group flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium hover:text-indigo-700 transition-all {{ $isActive ? 'active' : 'text-gray-600 hover:bg-indigo-50' }}"
+                            :title="sidebarCollapsed ? '{{ $item['label'] }}' : ''">
+                            <i data-lucide="{{ $item['icon'] }}"
+                                class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110"></i>
+                            <span x-show="!sidebarCollapsed" x-transition:enter.delay.100ms x-cloak>{{ $item['label'] }}</span>
+                        </a>
+                    @endif
                 @endforeach
             </nav>
 
@@ -404,11 +440,22 @@
                 </div>
                 <nav class="flex-1 space-y-2">
                     @foreach($navItems as $item)
-                        <a href="{{ route($item['route']) }}"
-                            class="flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium transition-colors {{ request()->routeIs($item['route']) ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-indigo-50 hover:text-indigo-700' }}">
-                            <i data-lucide="{{ $item['icon'] }}" class="w-5 h-5"></i>
-                            {{ $item['label'] }}
-                        </a>
+                        @if(($item['type'] ?? null) === 'dropdown')
+                            <p class="px-4 pt-3 pb-1 text-xs font-bold text-gray-400 uppercase tracking-widest">{{ $item['label'] }}</p>
+                            @foreach($item['children'] as $child)
+                                <a href="{{ route($child['route']) }}"
+                                    class="flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium transition-colors {{ request()->routeIs($child['route']) ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-indigo-50 hover:text-indigo-700' }}">
+                                    <i data-lucide="{{ $child['icon'] }}" class="w-5 h-5"></i>
+                                    {{ $child['label'] }}
+                                </a>
+                            @endforeach
+                        @else
+                            <a href="{{ route($item['route']) }}"
+                                class="flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium transition-colors {{ request()->routeIs($item['route']) ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-indigo-50 hover:text-indigo-700' }}">
+                                <i data-lucide="{{ $item['icon'] }}" class="w-5 h-5"></i>
+                                {{ $item['label'] }}
+                            </a>
+                        @endif
                     @endforeach
                 </nav>
             </div>
