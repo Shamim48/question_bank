@@ -20,7 +20,7 @@ new #[Layout('layouts.guest')] class extends Component {
         Session::regenerate();
 
         $user = auth()->user();
-        $default = $user->isAdmin() ? route('admin.dashboard') : route('student.dashboard');
+        $default = ($user->isAdmin() || $user->isTeam()) ? route('admin.dashboard') : route('student.dashboard');
         $this->redirectIntended(default: $default);
     }
 }; ?>

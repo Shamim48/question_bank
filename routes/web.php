@@ -14,6 +14,11 @@ Route::get('/run-migrate-seed', function () {
     return "Migrations ran successfully! You can now use the new features.";
 });
 
+// Route::get('storage-link', function () {
+//     Artisan::call('storage:link');
+//     return 'storage link created successfully!';
+// });
+
 // Public
 // Route::get('/', function () {
 //     if (auth()->check()) {
@@ -53,7 +58,8 @@ Route::get('/events', [EventController::class, 'index'])->name('events.index');
 
 // Fallback dashboard route (Breeze expects this)
 Route::middleware(['auth'])->get('/dashboard', function () {
-    return auth()->user()->isAdmin()
+    $user = auth()->user();
+    return ($user->isAdmin() || $user->isTeam())
         ? redirect()->route('admin.dashboard')
         : redirect()->route('student.dashboard');
 })->name('dashboard');
