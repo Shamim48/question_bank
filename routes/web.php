@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Artisan;
@@ -47,6 +48,9 @@ Route::get('/ambassadors', function () {
     return view('ambassadors');
 })->name('ambassadors');
 
+// Events (public)
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+
 // Fallback dashboard route (Breeze expects this)
 Route::middleware(['auth'])->get('/dashboard', function () {
     return auth()->user()->isAdmin()
@@ -70,6 +74,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
     Route::get('/users/pending', [TeamController::class, 'pending'])->name('admin.users.pending');
     Route::post('/users/{team}/approve', [TeamController::class, 'approve'])->name('admin.users.approve');
@@ -101,6 +108,10 @@ Route::middleware(['auth', 'team.or.admin'])->prefix('admin')->group(function ()
     Route::get('/class-levels', function () {
         return view('admin.class-levels');
     })->name('admin.class-levels');
+
+    Route::get('/events', function () {
+        return view('admin.events');
+    })->name('admin.events');
 
     Route::get('/participants', function () {
         return view('admin.participants');

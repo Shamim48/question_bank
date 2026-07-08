@@ -280,13 +280,7 @@
                 </ul>
             </li>
 
-            <li class="dropdown">
-                <a href="https://studentsoftheyear.com/events" class="dropdown-toggle"
-                    data-dropdown-id="events-menu">Events ▼</a>
-                <ul class="dropdown-menu" id="events-menu">
-                    <li><a href="#">Season 3</a></li>
-                </ul>
-            </li>
+            <li><a href="{{ route('events.index') }}">Events</a></li>
 
             <li><a href="https://studentsoftheyear.com/gallery">Gallery</a></li>
             <li><a href="https://studentsoftheyear.com/winners">Winners</a></li>

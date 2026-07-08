@@ -18,5 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, $request) {
+            if ($e->getStatusCode() === 419) {
+                return back()
+                    ->withInput($request->except('password', 'password_confirmation'))
+                    ->with('error', 'Your session expired. Please try again.');
+            }
+        });
     })->create();

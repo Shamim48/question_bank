@@ -29,15 +29,30 @@
                         @if($user->phone) &middot; {{ $user->phone }} @endif
                     </p>
                 </div>
-                @if($user->role !== 'admin' && $user->team)
-                    <div class="shrink-0">
+                <div class="shrink-0 flex items-center gap-2">
+                    <a href="{{ route('admin.users.edit', $user) }}"
+                        class="w-9 h-9 flex items-center justify-center bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded-xl transition-all">
+                        <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                    </a>
+                    @if($user->role !== 'admin' && $user->team)
                         <a href="{{ route('admin.users.reject', $user->team) }}"
                             onclick="return confirm('Revoke access for {{ $user->name }}?')"
                             class="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-xs font-bold uppercase tracking-widest rounded-xl transition-all flex items-center gap-1">
                             <i data-lucide="ban" class="w-3.5 h-3.5"></i> Revoke
                         </a>
-                    </div>
-                @endif
+                    @endif
+                    @if($user->id !== auth()->id())
+                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
+                            onsubmit="return confirm('Delete {{ $user->name }}? This cannot be undone.')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="w-9 h-9 flex items-center justify-center bg-red-100 hover:bg-red-200 text-red-700 rounded-xl transition-all">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </form>
+                    @endif
+                </div>
             </div>
         @empty
             <p class="p-6 text-sm text-gray-400">No users found.</p>

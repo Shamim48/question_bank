@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'QuestionBank') }} — @yield('title', 'Login')</title>
+    <title>{{ config('app.name', 'Student of the Year') }} — @yield('title', 'Login')</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,7 +85,7 @@
                 </div>
 
                 <h1 class="font-display font-black text-gray-900 text-5xl leading-tight mb-6 tracking-tight">
-                    Question<br>Bank
+                    Student of<br>the Year
                 </h1>
                 <p class="text-gray-400 text-base leading-relaxed font-light">
                     Your centralised learning and assessment platform. Track progress, ace exams.
@@ -110,7 +110,7 @@
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                     </svg>
                 </div>
-                <h1 class="font-display font-black text-gray-900 text-3xl tracking-tight">QuestionBank</h1>
+                <h1 class="font-display font-black text-gray-900 text-3xl tracking-tight">SOTY</h1>
             </div>
 
             <div class="w-full max-w-sm">
@@ -127,7 +127,7 @@
 
             <!-- Footer -->
             <p class="absolute bottom-8 text-xs text-gray-300">
-                &copy; {{ date('Y') }} QuestionBank. All rights reserved.
+                &copy; {{ date('Y') }} Student of the Year. All rights reserved.
             </p>
         </div>
 

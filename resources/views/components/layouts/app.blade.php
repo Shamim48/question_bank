@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'QuestionBank') }} — @yield('title', 'Dashboard')</title>
+    <title>{{ config('app.name', 'Student of the Year') }} — @yield('title', 'Dashboard')</title>
 
     <!-- Fonts: Inter & Outfit for headers -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -193,7 +193,7 @@
                         <i data-lucide="zap" class="w-6 h-6 text-white fill-white"></i>
                     </div>
                     <span class="font-display font-bold text-xl tracking-tight gradient-text whitespace-nowrap">
-                        {{ auth()->check() && auth()->user()->isAdmin() ? 'QB Admin' : 'Student Portal' }}
+                        {{ auth()->check() && auth()->user()->isAdmin() ? 'SOTY Admin' : 'Student Portal' }}
                     </span>
                 </div>
                 <div x-show="sidebarCollapsed" class="w-full flex justify-center">
@@ -218,6 +218,7 @@
                         ['route' => 'admin.groups',         'icon' => 'users',             'label' => 'Groups',         'permission' => 'groups-list'],
                         ['route' => 'admin.seasons.index',  'icon' => 'calendar',          'label' => 'Seasons',        'permission' => 'seasons-list', 'activePattern' => 'admin.seasons*'],
                         ['route' => 'admin.class-levels',   'icon' => 'graduation-cap',    'label' => 'Classes',        'permission' => 'class-levels-list'],
+                        ['route' => 'admin.events',         'icon' => 'calendar-days',     'label' => 'Events',         'permission' => 'events-list'],
                         ['route' => 'admin.participants',   'icon' => 'user-check',        'label' => 'Participant Management', 'permission' => 'participants-list'],
                         ['route' => 'admin.rounds',         'icon' => 'layers',            'label' => 'Exam Rounds',    'permission' => 'rounds-list'],
                         ['route' => 'admin.questions',      'icon' => 'database',          'label' => 'Question Bank',  'permission' => 'questions-list'],
@@ -433,7 +434,7 @@
             <div class="p-6 h-full flex flex-col">
                 <div class="flex items-center justify-between mb-8">
                     <span class="font-display font-bold text-xl gradient-text">
-                        {{ auth()->check() && auth()->user()->isAdmin() ? 'QB Admin' : 'Student Portal' }}
+                        {{ auth()->check() && auth()->user()->isAdmin() ? 'SOTY Admin' : 'Student Portal' }}
                     </span>
                     <button @click="mobileMenuOpen = false" class="text-gray-600 hover:text-indigo-700"><i data-lucide="x"
                             class="w-6 h-6"></i></button>

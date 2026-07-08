@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'QuestionBank') }} — @yield('title', 'Login')</title>
+    <title>{{ config('app.name', 'Student of the Year') }} — @yield('title', 'Login')</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,7 +59,7 @@
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
         </div>
-        <h1 class="font-display font-black text-gray-900 text-2xl tracking-tight">QuestionBank</h1>
+        <h1 class="font-display font-black text-gray-900 text-2xl tracking-tight">Student of the Year</h1>
         <p class="text-gray-400 text-sm mt-1">Learning Management System</p>
     </div>
 
@@ -69,7 +69,7 @@
     </div>
 
     <!-- Footer -->
-    <p class="mt-8 text-xs text-gray-400">&copy; {{ date('Y') }} QuestionBank. All rights reserved.</p>
+    <p class="mt-8 text-xs text-gray-400">&copy; {{ date('Y') }} Student of the Year. All rights reserved.</p>
 
     @livewireScripts
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

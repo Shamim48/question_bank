@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'QuestionBank') }} — @yield('title', 'Dashboard')</title>
+    <title>{{ config('app.name', 'Student of the Year') }} — @yield('title', 'Dashboard')</title>
 
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -158,7 +158,7 @@
         <!-- Sidebar -->
         <aside class="w-64 glass fixed h-full z-30 flex flex-col" id="sidebar">
             <div class="p-6 border-b border-indigo-500/20">
-                <h1 class="text-xl font-bold gradient-text">✦ QuestionBank</h1>
+                <h1 class="text-xl font-bold gradient-text">✦ SOTY</h1>
                 <p class="text-xs text-indigo-300/60 mt-1">Learning Management System</p>
             </div>
 

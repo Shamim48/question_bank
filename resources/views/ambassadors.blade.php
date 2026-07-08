@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Ambassador Search — QuestionBank</title>
+    <title>Ambassador Search — SOTY</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -67,7 +67,7 @@
     class="font-sans antialiased bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 text-gray-100 min-h-screen">
     <div class="max-w-6xl mx-auto px-6 py-12">
         <div class="text-center mb-8">
-            <a href="/" class="text-3xl font-bold gradient-text">✦ QuestionBank</a>
+            <a href="/" class="text-3xl font-bold gradient-text">✦ SOTY</a>
         </div>
         <livewire:ambassador-search />
     </div>
