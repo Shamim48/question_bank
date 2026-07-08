@@ -14,37 +14,68 @@
         </a>
     </div>
 
-    <div class="glass-card rounded-[2rem] border border-gray-100 overflow-hidden">
-        @forelse($users as $user)
-            <div class="p-6 border-b border-gray-100 last:border-0 flex items-start gap-4">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=6366f1&color=fff"
-                    class="w-14 h-14 rounded-2xl object-cover border border-indigo-100 shrink-0">
-                <div class="flex-1">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <p class="font-bold text-gray-900">{{ $user->name }}</p>
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700 uppercase">{{ $user->role }}</span>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-0.5">
-                        {{ $user->email }}
-                        @if($user->phone) &middot; {{ $user->phone }} @endif
-                    </p>
-                </div>
-                @if($user->role !== 'admin' && $user->team)
-                    <div class="shrink-0">
-                        <a href="{{ route('admin.users.reject', $user->team) }}"
-                            onclick="return confirm('Revoke access for {{ $user->name }}?')"
-                            class="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-xs font-bold uppercase tracking-widest rounded-xl transition-all flex items-center gap-1">
-                            <i data-lucide="ban" class="w-3.5 h-3.5"></i> Revoke
-                        </a>
-                    </div>
-                @endif
-            </div>
-        @empty
-            <p class="p-6 text-sm text-gray-400">No users found.</p>
-        @endforelse
+    <div class="glass rounded-[2rem] overflow-hidden border border-white/5">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-white/5">
+                    <th class="py-5 px-8 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">User</th>
+                    <th class="py-5 px-8 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Contact</th>
+                    <th class="py-5 px-8 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Role</th>
+                    <th class="py-5 px-8 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Status</th>
+                    <th class="py-5 px-8 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5">
+                @forelse($users as $user)
+                    <tr class="group hover:bg-white/[0.02] transition-colors">
+                        <td class="py-5 px-8">
+                            <div class="flex items-center gap-4">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=6366f1&color=fff"
+                                    class="w-10 h-10 rounded-xl object-cover border border-gray-200 shrink-0">
+                                <p class="text-sm font-bold text-gray-900">{{ $user->name }}</p>
+                            </div>
+                        </td>
+                        <td class="py-5 px-8">
+                            <p class="text-xs text-gray-700">{{ $user->email }}</p>
+                            <p class="text-[10px] text-gray-500">{{ $user->phone ?: '—' }}</p>
+                        </td>
+                        <td class="py-5 px-8">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 text-[10px] font-bold uppercase tracking-wider rounded-lg">
+                                {{ $user->role }}
+                            </span>
+                        </td>
+                        <td class="py-5 px-8">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-[10px] font-bold uppercase tracking-wider rounded-lg">
+                                Active
+                            </span>
+                        </td>
+                        <td class="py-5 px-8 text-right">
+                            @if($user->role !== 'admin' && $user->team)
+                                <a href="{{ route('admin.users.reject', $user->team) }}"
+                                    onclick="return confirm('Revoke access for {{ $user->name }}?')"
+                                    class="w-9 h-9 glass rounded-lg inline-flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-white transition-all">
+                                    <i data-lucide="ban" class="w-4 h-4"></i>
+                                </a>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="py-20 text-center">
+                            <i data-lucide="users" class="w-12 h-12 text-gray-700 mx-auto mb-4"></i>
+                            <p class="text-gray-500 font-medium">No users found.</p>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 
-    {{ $users->links() }}
+    @if($users->hasPages())
+        <div class="flex justify-center">
+            {{ $users->links() }}
+        </div>
+    @endif
 
 </div>
 </x-layouts.app>

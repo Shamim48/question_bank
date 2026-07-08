@@ -218,7 +218,15 @@
                         ['route' => 'admin.groups',         'icon' => 'users',             'label' => 'Groups',         'permission' => 'groups-list'],
                         ['route' => 'admin.seasons.index',  'icon' => 'calendar',          'label' => 'Seasons',        'permission' => 'seasons-list', 'activePattern' => 'admin.seasons*'],
                         ['route' => 'admin.class-levels',   'icon' => 'graduation-cap',    'label' => 'Classes',        'permission' => 'class-levels-list'],
-                        ['route' => 'admin.participants',   'icon' => 'user-check',        'label' => 'Participant Management', 'permission' => 'participants-list'],
+                        [
+                            'type'       => 'dropdown',
+                            'icon'       => 'user-check',
+                            'label'      => 'Participant Management',
+                            'permission' => 'participants-list',
+                            'children'   => [
+                                ['route' => 'admin.participants', 'icon' => 'users', 'label' => 'Student List'],
+                            ],
+                        ],
                         ['route' => 'admin.rounds',         'icon' => 'layers',            'label' => 'Exam Rounds',    'permission' => 'rounds-list'],
                         ['route' => 'admin.questions',      'icon' => 'database',          'label' => 'Question Bank',  'permission' => 'questions-list'],
                         ['route' => 'admin.exams',          'icon' => 'activity',          'label' => 'Exam Control',   'permission' => 'exams-list'],
@@ -226,7 +234,6 @@
                         ['route' => 'admin.offline-marks',  'icon' => 'clipboard-check',   'label' => 'Offline Marks',  'permission' => 'offline-marks-list'],
                         ['route' => 'admin.certificates',   'icon' => 'scroll',            'label' => 'Certificates',   'permission' => 'certificates-list'],
                         ['route' => 'admin.pdf-books',      'icon' => 'book',              'label' => 'PDF Books',      'permission' => 'pdf-books-list'],
-                        ['route' => 'ambassadors',          'icon' => 'star',              'label' => 'Ambassadors',    'permission' => 'ambassadors-list'],
                         [
                             'type'      => 'dropdown',
                             'icon'      => 'shield-check',

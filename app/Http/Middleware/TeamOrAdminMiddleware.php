@@ -15,6 +15,8 @@ class TeamOrAdminMiddleware
         'admin.rounds'          => 'rounds-list',
         'admin.subjects'        => 'subjects-list',
         'admin.groups'          => 'groups-list',
+        'admin.class-levels'    => 'class-levels-list',
+        'admin.participants'    => 'participants-list',
         'admin.questions'       => 'questions-list',
         'admin.exams'           => 'exams-list',
         'admin.marks'           => 'marks-list',
