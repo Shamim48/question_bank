@@ -35,4 +35,15 @@ return [
         ],
     ],
 
+    'sms' => [
+        'driver' => env('SMS_DRIVER', 'log'),
+    ],
+
+    'banner' => [
+        'template_path' => env('BANNER_TEMPLATE_PATH', public_path('images/banner-frame-template.png')),
+        'font_path'     => env('BANNER_FONT_PATH', public_path('fonts/Placeholder-Bold.ttf')),
+        'photo_slot'    => ['x' => 180, 'y' => 155, 'size' => 320],
+        'text_slot'     => ['x' => 870, 'y' => 575, 'size' => 32],
+    ],
+
 ];

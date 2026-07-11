@@ -54,7 +54,7 @@
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Strategic
                             Round</label>
                         <select wire:model.live="round_id"
-                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
                             <option value="">Select Phase</option>
                             @foreach($rounds as $round)<option value="{{ $round->id }}">{{ $round->name }}</option>
                             @endforeach
@@ -66,7 +66,7 @@
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Subject
                             Domain</label>
                         <select wire:model="subject_id"
-                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
                             <option value="">Select Domain</option>
                             @foreach($subjects as $subject)<option value="{{ $subject['id'] }}">{{ $subject['name'] }}
                             </option>@endforeach
@@ -81,7 +81,7 @@
                             <i data-lucide="plus"
                                 class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"></i>
                             <input type="number" step="0.01" wire:model="manual_marks"
-                                class="w-full bg-white border-gray-200 rounded-2xl pl-12 pr-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50"
+                                class="w-full bg-white border-gray-200 rounded-2xl pl-12 pr-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50"
                                 min="0" placeholder="0.00">
                         </div>
                         @error('manual_marks') <span class="text-red-400 text-[10px]">{{ $message }}</span> @enderror

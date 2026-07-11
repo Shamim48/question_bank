@@ -101,18 +101,20 @@
         </div>
     </div>
 
-    <!-- Quick Actions / Tools -->
+    <!-- Exam Management Menu -->
     <div>
-        <h3 class="text-xl font-display font-bold text-gray-900 mb-6">Quick Tools</h3>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <h3 class="text-xl font-display font-bold text-gray-900 mb-6">Exam Management Menu</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             @php
                 $tools = [
-                    ['label' => 'Import Excel', 'icon' => 'file-up', 'route' => 'admin.questions'],
-                    ['label' => 'Export Data', 'icon' => 'file-down', 'route' => 'admin.questions'],
-                    ['label' => 'Certify All', 'icon' => 'scroll', 'route' => 'admin.certificates'],
-                    ['label' => 'Final Round', 'icon' => 'star', 'route' => 'admin.rounds'],
-                    ['label' => 'Subject Map', 'icon' => 'map', 'route' => 'admin.subjects'],
-                    ['label' => 'User Logs', 'icon' => 'terminal', 'route' => 'admin.dashboard'],
+                    ['label' => 'Student List', 'icon' => 'user-check', 'route' => 'admin.participants'],
+                    ['label' => 'Exam Rounds', 'icon' => 'layers', 'route' => 'admin.rounds'],
+                    ['label' => 'Question Bank', 'icon' => 'database', 'route' => 'admin.questions'],
+                    ['label' => 'Exam Control', 'icon' => 'activity', 'route' => 'admin.exams'],
+                    ['label' => 'Manual Marks', 'icon' => 'award', 'route' => 'admin.marks'],
+                    ['label' => 'Offline Marks', 'icon' => 'clipboard-check', 'route' => 'admin.offline-marks'],
+                    ['label' => 'Certificates', 'icon' => 'scroll', 'route' => 'admin.certificates'],
+                    ['label' => 'PDF Books', 'icon' => 'book', 'route' => 'admin.pdf-books'],
                 ];
             @endphp
             @foreach($tools as $tool)

@@ -46,7 +46,8 @@ class ExamList extends Component
     public function render()
     {
         $user = auth()->user();
-        $activeRounds = Round::where('is_active', true)->with('subjects')->orderBy('order')->get();
+        $allowedOrder = $user->student?->effectiveRoundOrder() ?? 0;
+        $activeRounds = Round::where('is_active', true)->where('order', '<=', $allowedOrder)->with('subjects')->orderBy('order')->get();
         $completedExams = Exam::where('user_id', $user->id)->where('status', 'completed')->get();
 
         return view('livewire.student.exam-list', [

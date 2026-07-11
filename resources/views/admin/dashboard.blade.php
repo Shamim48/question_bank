@@ -1,4 +1,4 @@
 <x-layouts.app>
-    @section('title', 'Admin Dashboard')
-    <livewire:admin.dashboard />
+    @section('title', 'User Management Dashboard')
+    <livewire:admin.user-management-dashboard />
 </x-layouts.app>

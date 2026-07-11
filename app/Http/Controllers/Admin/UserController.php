@@ -19,16 +19,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::where('role', '!=', 'student')
-            ->where(function ($query) {
-                $query->where('role', 'admin')
-                    ->orWhereHas('team', fn ($t) => $t->where('status', 1));
-            })
-            ->with('team')
-            ->latest()
-            ->paginate(15);
-
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index');
     }
 
     public function create()
@@ -50,11 +41,12 @@ class UserController extends Controller
 
         DB::transaction(function () use ($request) {
             $user = User::create([
-                'name'     => $request->name,
-                'email'    => $request->email,
-                'phone'    => $request->phone,
-                'password' => Hash::make($request->password),
-                'role'     => $request->role,
+                'name'          => $request->name,
+                'email'         => $request->email,
+                'phone'         => $request->phone,
+                'password'      => Hash::make($request->password),
+                'role'          => $request->role,
+                'referral_code' => User::generateReferralCode($request->name),
             ]);
 
             Team::create([

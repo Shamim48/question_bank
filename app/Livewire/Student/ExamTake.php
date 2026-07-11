@@ -29,6 +29,11 @@ class ExamTake extends Component
             abort(403);
         }
 
+        $allowedOrder = auth()->user()->student?->effectiveRoundOrder() ?? 0;
+        if ($this->exam->round->order > $allowedOrder) {
+            abort(403, 'This round is not yet unlocked for you.');
+        }
+
         if ($this->exam->status === 'completed') {
             $this->examCompleted = true;
             $this->loadReviewAnswers();

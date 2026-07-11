@@ -8,7 +8,7 @@
     <!-- Header Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h2 class="text-3xl font-display font-bold text-white mb-2">Question Bank</h2>
+            <h2 class="text-3xl font-display font-bold text-gray-900 mb-2">Question Bank</h2>
             <p class="text-sm text-gray-400">Manage and organize your MCQ ecosystem</p>
         </div>
         <div class="flex items-center gap-4">
@@ -39,11 +39,11 @@
             <div class="md:col-span-3 relative group">
                 <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-indigo-400 transition-colors"></i>
                 <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search by content..."
-                    class="w-full bg-white/5 border-none rounded-2xl pl-12 pr-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    class="w-full bg-white/5 border-none rounded-2xl pl-12 pr-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
             </div>
             <div class="md:col-span-2">
                 <select wire:model.live="filterRound"
-                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
                     <option value="">All Rounds</option>
                     @foreach($rounds as $round)
                         <option value="{{ $round->id }}">{{ $round->name }}</option>
@@ -52,7 +52,7 @@
             </div>
             <div class="md:col-span-2">
                 <select wire:model.live="filterSubject"
-                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
                     <option value="">All Subjects</option>
                     @foreach($subjects as $subject)
                         <option value="{{ $subject->id }}">{{ $subject->name }} ({{ $subject->round->name }})</option>
@@ -61,7 +61,7 @@
             </div>
             <div class="md:col-span-2">
                 <select wire:model.live="filterGroup"
-                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
                     <option value="">All Groups</option>
                     @foreach($groups as $group)
                         <option value="{{ $group->id }}">{{ $group->name }}</option>
@@ -70,7 +70,7 @@
             </div>
             <div class="md:col-span-2">
                 <select wire:model.live="filterType"
-                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
                     <option value="">All Types</option>
                     <option value="text">Text</option>
                     <option value="image">Image</option>
@@ -167,9 +167,9 @@
                 <div class="w-20 h-20 bg-white/5 rounded-3xl flex items-center justify-center mx-auto mb-6">
                     <i data-lucide="search-x" class="w-10 h-10 text-gray-600"></i>
                 </div>
-                <h3 class="text-xl font-display font-bold text-white mb-2">No results found</h3>
+                <h3 class="text-xl font-display font-bold text-gray-900 mb-2">No results found</h3>
                 <p class="text-gray-500 max-w-xs mx-auto">Try adjusting your filters or search term to find what you're looking for.</p>
-                <button wire:click="$set('search', '')" class="mt-8 text-indigo-400 font-bold uppercase tracking-widest text-[10px] hover:text-white transition-colors">Clear All Filters</button>
+                <button wire:click="$set('search', '')" class="mt-8 text-indigo-400 font-bold uppercase tracking-widest text-[10px] hover:text-indigo-700 transition-colors">Clear All Filters</button>
             </div>
         @endforelse
     </div>
@@ -240,7 +240,7 @@
                     <!-- Content -->
                     <div class="space-y-2">
                         <label class="text-xs font-bold {{ $errors->has('content') ? 'text-red-500' : 'text-gray-400' }} uppercase tracking-widest ml-1">Question Blueprint</label>
-                        <textarea wire:model="content" rows="4" class="w-full bg-white/5 {{ $errors->has('content') ? 'border-red-500' : 'border-white/10' }} rounded-2xl px-6 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white placeholder-gray-600" placeholder="Type your intellectual challenge here..."></textarea>
+                        <textarea wire:model="content" rows="4" class="w-full bg-white/5 {{ $errors->has('content') ? 'border-red-500' : 'border-white/10' }} rounded-2xl px-6 py-4 focus:ring-2 focus:ring-indigo-500/50 text-gray-900 placeholder-gray-600" placeholder="Type your intellectual challenge here..."></textarea>
                         @error('content') <span class="text-red-400 text-[10px] font-bold ml-1 block">{{ $message }}</span> @enderror
                     </div>
 

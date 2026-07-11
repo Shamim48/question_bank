@@ -205,20 +205,47 @@
             </div>
 
             <!-- Navigation -->
-            <nav class="flex-1 px-4 py-8 space-y-2 overflow-y-auto no-scrollbar">
+            <nav class="flex-1 min-h-0 px-4 py-8 space-y-2 overflow-y-auto no-scrollbar">
                 @php
                     $authUser = auth()->user();
                     $isAdmin  = $authUser?->isAdmin();
                     $isTeam   = $authUser?->isTeam();
 
-                    $allAdminItems = [
+                    $examSectionRoutes = [
+                        'admin.exam-dashboard', 'admin.participants', 'admin.rounds', 'admin.questions',
+                        'admin.exams', 'admin.marks', 'admin.offline-marks', 'admin.certificates', 'admin.pdf-books',
+                    ];
+                    $inExamSection = collect($examSectionRoutes)->contains(fn($r) => request()->routeIs($r));
+
+                    $mainAdminItems = [
                         ['route' => 'admin.profile',        'icon' => 'user-round',        'label' => 'My Profile',     'permission' => 'profile-access'],
                         ['route' => 'admin.dashboard',      'icon' => 'layout-dashboard',  'label' => 'Dashboard',      'permission' => 'dashboard-access'],
+                        ['route' => 'admin.exam-dashboard', 'icon' => 'bar-chart-3',       'label' => 'Exam Dashboard', 'permission' => 'dashboard-access'],
                         ['route' => 'admin.subjects',       'icon' => 'book-open',         'label' => 'Subjects',       'permission' => 'subjects-list'],
                         ['route' => 'admin.groups',         'icon' => 'users',             'label' => 'Groups',         'permission' => 'groups-list'],
                         ['route' => 'admin.seasons.index',  'icon' => 'calendar',          'label' => 'Seasons',        'permission' => 'seasons-list', 'activePattern' => 'admin.seasons*'],
                         ['route' => 'admin.class-levels',   'icon' => 'graduation-cap',    'label' => 'Classes',        'permission' => 'class-levels-list'],
                         ['route' => 'admin.events',         'icon' => 'calendar-days',     'label' => 'Events',         'permission' => 'events-list'],
+                        ['route' => 'admin.commissions',    'icon' => 'badge-percent',     'label' => 'Referrals & Commissions', 'permission' => 'commissions-list'],
+                        ['route' => 'admin.bulk-messenger', 'icon' => 'send',              'label' => 'Bulk SMS/Email', 'permission' => 'bulk-messages-list'],
+                        [
+                            'type'      => 'dropdown',
+                            'icon'      => 'shield-check',
+                            'label'     => 'User Management',
+                            'adminOnly' => true,
+                            'children'  => [
+                                ['route' => 'admin.users.create',  'icon' => 'user-plus', 'label' => 'Add User'],
+                                ['route' => 'admin.users.index',   'icon' => 'users',      'label' => 'User List'],
+                                ['route' => 'admin.users.pending', 'icon' => 'clock',      'label' => 'Pending User'],
+                                ['route' => 'admin.roles',         'icon' => 'tag',        'label' => 'Roles'],
+                                ['route' => 'admin.settings',      'icon' => 'settings',   'label' => 'System Settings'],
+                            ],
+                        ],
+                    ];
+
+                    $examAdminItems = [
+                        ['route' => 'admin.dashboard',      'icon' => 'arrow-left',        'label' => 'Back to Dashboard', 'permission' => 'dashboard-access'],
+                        ['route' => 'admin.exam-dashboard', 'icon' => 'bar-chart-3',       'label' => 'Exam Dashboard',    'permission' => 'dashboard-access'],
                         [
                             'type'       => 'dropdown',
                             'icon'       => 'user-check',
@@ -235,19 +262,9 @@
                         ['route' => 'admin.offline-marks',  'icon' => 'clipboard-check',   'label' => 'Offline Marks',  'permission' => 'offline-marks-list'],
                         ['route' => 'admin.certificates',   'icon' => 'scroll',            'label' => 'Certificates',   'permission' => 'certificates-list'],
                         ['route' => 'admin.pdf-books',      'icon' => 'book',              'label' => 'PDF Books',      'permission' => 'pdf-books-list'],
-                        [
-                            'type'      => 'dropdown',
-                            'icon'      => 'shield-check',
-                            'label'     => 'User Management',
-                            'adminOnly' => true,
-                            'children'  => [
-                                ['route' => 'admin.users.create',  'icon' => 'user-plus', 'label' => 'Add User'],
-                                ['route' => 'admin.users.index',   'icon' => 'users',      'label' => 'User List'],
-                                ['route' => 'admin.users.pending', 'icon' => 'clock',      'label' => 'Pending User'],
-                                ['route' => 'admin.roles',         'icon' => 'tag',        'label' => 'Roles'],
-                            ],
-                        ],
                     ];
+
+                    $allAdminItems = $inExamSection ? $examAdminItems : $mainAdminItems;
 
                     if ($isAdmin) {
                         $navItems = $allAdminItems;
@@ -264,6 +281,7 @@
                             ['route' => 'student.results',      'icon' => 'award',            'label' => 'Results'],
                             ['route' => 'student.certificates', 'icon' => 'scroll',           'label' => 'Certificates'],
                             ['route' => 'student.pdf-books',    'icon' => 'book',             'label' => 'PDF Books'],
+                            ['route' => 'student.banner',       'icon' => 'image',            'label' => 'My Banner'],
                             ['route' => 'student.profile',      'icon' => 'user-round',       'label' => 'My Profile'],
                         ];
                     }
@@ -446,7 +464,7 @@
                     <button @click="mobileMenuOpen = false" class="text-gray-600 hover:text-indigo-700"><i data-lucide="x"
                             class="w-6 h-6"></i></button>
                 </div>
-                <nav class="flex-1 space-y-2">
+                <nav class="flex-1 min-h-0 space-y-2 overflow-y-auto no-scrollbar">
                     @foreach($navItems as $item)
                         @if(($item['type'] ?? null) === 'dropdown')
                             <p class="px-4 pt-3 pb-1 text-xs font-bold text-gray-400 uppercase tracking-widest">{{ $item['label'] }}</p>

@@ -18,6 +18,8 @@ class TeamOrAdminMiddleware
         'admin.class-levels'    => 'class-levels-list',
         'admin.events'          => 'events-list',
         'admin.participants'    => 'participants-list',
+        'admin.commissions'     => 'commissions-list',
+        'admin.bulk-messenger'  => 'bulk-messages-list',
         'admin.questions'       => 'questions-list',
         'admin.exams'           => 'exams-list',
         'admin.marks'           => 'marks-list',

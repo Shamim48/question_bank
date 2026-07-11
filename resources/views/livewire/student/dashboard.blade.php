@@ -36,6 +36,26 @@
         </div>
     </div>
 
+    @if($group?->google_form_url)
+        <div class="glass-card rounded-[2rem] p-6 lg:p-8 border border-indigo-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+                    <i data-lucide="clipboard-list" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h4 class="text-base font-bold text-gray-900">Fill out our {{ $group->name }} form</h4>
+                    @if($group->google_form_note)
+                        <p class="text-sm text-gray-500">{{ $group->google_form_note }}</p>
+                    @endif
+                </div>
+            </div>
+            <a href="{{ $group->google_form_url }}" target="_blank"
+                class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/20 flex items-center gap-2 shrink-0">
+                Open Form <i data-lucide="external-link" class="w-4 h-4"></i>
+            </a>
+        </div>
+    @endif
+
     <!-- Stats Matrix -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div

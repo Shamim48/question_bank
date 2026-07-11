@@ -3,7 +3,7 @@
     <!-- Hero / Action Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h2 class="text-3xl font-display font-bold text-white mb-2">Operational Command</h2>
+            <h2 class="text-3xl font-display font-bold text-gray-900 mb-2">Operational Command</h2>
             <p class="text-sm text-gray-400">Real-time control over competition phases and live activity</p>
         </div>
         <div class="flex items-center gap-3">
@@ -23,7 +23,7 @@
                         <div>
                             <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-[0.2em] mb-1 block">Phase
                                 {{ $loop->iteration }}</span>
-                            <h3 class="text-xl font-display font-bold text-white">{{ $round->name }}</h3>
+                            <h3 class="text-xl font-display font-bold text-gray-900">{{ $round->name }}</h3>
                         </div>
                         @if($canControl)
                         <button wire:click="toggleRound({{ $round->id }})"
@@ -42,11 +42,11 @@
                     <div class="grid grid-cols-2 gap-4 mb-8">
                         <div class="glass p-4 rounded-2xl border-white/5">
                             <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Domains</p>
-                            <p class="text-lg font-bold text-white">{{ $round->subjects_count }}</p>
+                            <p class="text-lg font-bold text-gray-900">{{ $round->subjects_count }}</p>
                         </div>
                         <div class="glass p-4 rounded-2xl border-white/5">
                             <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Challenges</p>
-                            <p class="text-lg font-bold text-white">{{ $round->questions_count }}</p>
+                            <p class="text-lg font-bold text-gray-900">{{ $round->questions_count }}</p>
                         </div>
                     </div>
 
@@ -82,7 +82,7 @@
     <div class="glass-card rounded-[2.5rem] p-8 lg:p-12">
         <div class="flex items-center justify-between mb-10">
             <div>
-                <h3 class="text-2xl font-display font-bold text-white">Transmission Feed</h3>
+                <h3 class="text-2xl font-display font-bold text-gray-900">Transmission Feed</h3>
                 <p class="text-sm text-gray-500">Monitoring real-time exam status across all sectors</p>
             </div>
             <i data-lucide="activity" class="w-6 h-6 text-indigo-500 animate-pulse"></i>

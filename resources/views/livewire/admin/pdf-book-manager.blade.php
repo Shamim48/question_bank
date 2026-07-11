@@ -8,7 +8,7 @@
     <!-- Header Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h2 class="text-3xl font-display font-bold text-white mb-2">PDF Books Collection</h2>
+            <h2 class="text-3xl font-display font-bold text-gray-900 mb-2">PDF Books Collection</h2>
             <p class="text-sm text-gray-400">Manage learning materials assigned by group and round</p>
         </div>
         <div class="flex items-center gap-4">
@@ -29,11 +29,11 @@
             <div class="md:col-span-4 relative group">
                 <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-indigo-400 transition-colors"></i>
                 <input type="text" wire:model.live.debounce.300ms="searchTitle" placeholder="Search by book title..."
-                    class="w-full bg-white/5 border-none rounded-2xl pl-12 pr-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    class="w-full bg-white/5 border-none rounded-2xl pl-12 pr-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
             </div>
             <div class="md:col-span-3">
                 <select wire:model.live="filterRound"
-                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
                     <option value="">All Rounds</option>
                     @foreach($rounds as $round)
                         <option value="{{ $round->id }}">{{ $round->name }}</option>
@@ -42,7 +42,7 @@
             </div>
             <div class="md:col-span-4">
                 <select wire:model.live="filterGroup"
-                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
                     <option value="">All Groups</option>
                     @foreach($groups as $group)
                         <option value="{{ $group->id }}">{{ $group->name }}</option>
@@ -67,7 +67,7 @@
                     <i data-lucide="book" class="w-8 h-8 text-indigo-400"></i>
                 </div>
 
-                <h4 class="text-xl font-medium text-white mb-2 leading-tight">
+                <h4 class="text-xl font-medium text-gray-900 mb-2 leading-tight">
                     {{ $book->title }}
                 </h4>
                 
@@ -82,7 +82,7 @@
 
                 <div class="mt-auto flex gap-3 pt-6 border-t border-white/5">
                     <a href="{{ asset($book->file_path) }}" target="_blank"
-                       class="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-white rounded-xl text-sm font-medium transition-all text-center">
+                       class="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-gray-700 rounded-xl text-sm font-medium transition-all text-center">
                         <i data-lucide="eye" class="w-4 h-4 inline-block mr-1"></i> View
                     </a>
                     @if($canEdit)
@@ -105,7 +105,7 @@
                 <div class="w-20 h-20 bg-white/5 rounded-3xl flex items-center justify-center mx-auto mb-6">
                     <i data-lucide="book-x" class="w-10 h-10 text-gray-600"></i>
                 </div>
-                <h3 class="text-xl font-display font-bold text-white mb-2">No PDF Books Found</h3>
+                <h3 class="text-xl font-display font-bold text-gray-900 mb-2">No PDF Books Found</h3>
                 <p class="text-gray-500 max-w-xs mx-auto">Click 'Upload PDF Book' to add materials, or adjust filters if applied.</p>
             </div>
         @endforelse

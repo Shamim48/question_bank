@@ -8,7 +8,7 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h2 class="text-3xl font-display font-bold text-white mb-2">Group Manager</h2>
+            <h2 class="text-3xl font-display font-bold text-gray-900 mb-2">Group Manager</h2>
             <p class="text-sm text-gray-400">Manage participant groups and access levels</p>
         </div>
         @if($canCreate)
@@ -40,7 +40,15 @@
                                     <i data-lucide="users" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-bold text-white">{{ $group->name }}</p>
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-sm font-bold text-gray-900">{{ $group->name }}</p>
+                                        @if($group->google_form_url)
+                                            <a href="{{ $group->google_form_url }}" target="_blank"
+                                                class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-[9px] font-bold uppercase tracking-wider rounded">
+                                                <i data-lucide="link-2" class="w-3 h-3"></i> Form
+                                            </a>
+                                        @endif
+                                    </div>
                                     <p class="text-[10px] text-gray-500 mt-0.5 truncate max-w-[200px]">
                                         {{ $group->description ?: 'No description provided' }}</p>
                                 </div>
@@ -108,7 +116,7 @@
                     <div class="space-y-2">
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Group Name</label>
                         <input type="text" wire:model="name"
-                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-white"
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-gray-900"
                             placeholder="e.g. Science Class 2024">
                         @error('name') <span class="text-red-400 text-[10px]">{{ $message }}</span> @enderror
                     </div>
@@ -116,8 +124,24 @@
                     <div class="space-y-2">
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Description (Optional)</label>
                         <textarea wire:model="description" rows="3"
-                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-white"
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-gray-900"
                             placeholder="Brief overview of this group..."></textarea>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Google Form URL (Optional)</label>
+                        <input type="text" wire:model="googleFormUrl"
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-gray-900"
+                            placeholder="https://forms.gle/...">
+                        @error('googleFormUrl') <span class="text-red-400 text-[10px]">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Form Note (Optional)</label>
+                        <input type="text" wire:model="googleFormNote"
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-gray-900"
+                            placeholder="e.g. Please fill out by Friday">
+                        @error('googleFormNote') <span class="text-red-400 text-[10px]">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="flex gap-4 pt-4">

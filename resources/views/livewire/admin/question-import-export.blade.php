@@ -1,6 +1,6 @@
 <div class="slide-up mt-8">
     <div class="glass rounded-2xl p-6">
-        <h3 class="text-lg font-semibold text-white mb-4">Import / Export Questions</h3>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Import / Export Questions</h3>
         @if(session('message'))
             <div class="mb-4 rounded-xl p-3 border-l-4 border-emerald-500 bg-emerald-500/10">
                 <p class="text-emerald-300 text-sm">{{ session('message') }}</p>

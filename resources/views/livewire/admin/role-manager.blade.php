@@ -50,6 +50,14 @@
                             class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
                         <p class="mt-1 text-[10px] text-gray-400">Shown in dropdowns. Defaults to Role Name if empty.</p>
                     </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">
+                            Commission Per Referral (BDT)
+                        </label>
+                        <input wire:model="commission_amount" type="number" step="0.01" min="0" placeholder="0.00"
+                            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                        @error('commission_amount') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
                 </div>
                 <div class="flex gap-3">
                     <button type="submit"
@@ -74,6 +82,7 @@
                     <th class="px-6 py-3 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">#</th>
                     <th class="px-6 py-3 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Role Name</th>
                     <th class="px-6 py-3 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Display Name</th>
+                    <th class="px-6 py-3 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Commission</th>
                     <th class="px-6 py-3 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</th>
                     <th class="px-6 py-3 text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">Actions</th>
                 </tr>
@@ -90,6 +99,7 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 text-gray-600">{{ $role->display_name ?? '—' }}</td>
+                        <td class="px-6 py-4 text-gray-600">৳{{ number_format($role->commission_amount, 2) }}</td>
                         <td class="px-6 py-4 text-center">
                             @if($isSystem)
                                 <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-600">Active</span>
@@ -126,7 +136,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-10 text-center text-gray-400 text-sm">No roles found.</td>
+                        <td colspan="6" class="px-6 py-10 text-center text-gray-400 text-sm">No roles found.</td>
                     </tr>
                 @endforelse
             </tbody>

@@ -7,13 +7,13 @@
     <!-- Header Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h2 class="text-3xl font-display font-bold text-white mb-2">Credential Registry</h2>
+            <h2 class="text-3xl font-display font-bold text-gray-900 mb-2">Credential Registry</h2>
             <p class="text-sm text-gray-400">Validate and issue official certificates of achievement</p>
         </div>
         <div class="flex items-center gap-3">
             <div class="px-4 py-2 glass rounded-xl border-white/5 flex items-center gap-2">
                 <i data-lucide="award" class="w-4 h-4 text-amber-500"></i>
-                <span class="text-xs font-bold text-white">{{ $certificates->count() }} Issued</span>
+                <span class="text-xs font-bold text-gray-900">{{ $certificates->count() }} Issued</span>
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
                             class="w-10 h-10 rounded-xl bg-indigo-600/10 flex items-center justify-center text-indigo-400 text-6xl">
                             <i data-lucide="scroll" class="w-5 h-5"></i>
                         </div>
-                        <h3 class="text-xl font-display font-bold text-white">Issue Credential</h3>
+                        <h3 class="text-xl font-display font-bold text-gray-900">Issue Credential</h3>
                     </div>
 
                     <form wire:submit.prevent="generate" class="space-y-6">
@@ -37,7 +37,7 @@
                             <label
                                 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Recipient</label>
                             <select wire:model="user_id"
-                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
                                 <option value="">Select Candidate</option>
                                 @foreach($students as $student)<option value="{{ $student->id }}">{{ $student->name }}
                                 </option>@endforeach
@@ -50,7 +50,7 @@
                                 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Achievement
                                 Phase</label>
                             <select wire:model="round_id"
-                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
                                 <option value="">Select Round</option>
                                 @foreach($rounds as $round)<option value="{{ $round->id }}">{{ $round->name }}</option>
                                 @endforeach
@@ -62,7 +62,7 @@
                             <label
                                 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Group Domain</label>
                             <select wire:model="group_id"
-                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 text-white text-sm focus:ring-2 focus:ring-indigo-500/50">
+                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
                                 <option value="">Select Group</option>
                                 @foreach($groups as $group)<option value="{{ $group->id }}">{{ $group->name }}</option>
                                 @endforeach
@@ -89,9 +89,9 @@
         <div class="{{ $canCreate ? 'lg:col-span-8' : 'lg:col-span-12' }}">
             <div class="glass-card rounded-[2.5rem] p-8 lg:p-10 border border-white/5">
                 <div class="flex items-center justify-between mb-10">
-                    <h3 class="text-xl font-display font-bold text-white">Historical Records</h3>
+                    <h3 class="text-xl font-display font-bold text-gray-900">Historical Records</h3>
                     <div
-                        class="w-10 h-10 glass rounded-xl flex items-center justify-center text-gray-500 hover:text-white transition-colors">
+                        class="w-10 h-10 glass rounded-xl flex items-center justify-center text-gray-500 hover:text-indigo-600 transition-colors">
                         <i data-lucide="filter" class="w-5 h-5"></i>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
                                 </div>
                                 <div>
                                     <h4
-                                        class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">
+                                        class="text-base font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
                                         {{ $cert->user->name ?? 'Candidate Unknown' }}</h4>
                                     <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">ID:
                                         {{ $cert->certificate_number }} · {{ $cert->round->name }}

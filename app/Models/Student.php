@@ -19,6 +19,7 @@ class Student extends Model
     'class_id',
     'group_id',
     'season_id',
+    'current_round_id',
     'referrer_id',
     'known_from',
     'institute_name',
@@ -36,6 +37,7 @@ class Student extends Model
     'favourite_quote',
     'idol',
     'image',
+    'banner_path',
     'thana_id',
     'district_id',
     'division_id',
@@ -45,11 +47,10 @@ class Student extends Model
 
 
 
-  // Relation to Admin (Referrer)
-//   public function referrer()
-//   {
-//     return $this->belongsTo(Admin::class, 'referrer_id');
-//   }
+  public function referrer()
+  {
+    return $this->belongsTo(User::class, 'referrer_id');
+  }
 
   // Optionally, relation to Event
 //   public function event()
@@ -99,6 +100,18 @@ class Student extends Model
   public function season()
   {
     return $this->belongsTo(\App\Models\Season::class, 'season_id');
+  }
+
+  public function currentRound()
+  {
+    return $this->belongsTo(Round::class, 'current_round_id');
+  }
+
+  public function effectiveRoundOrder(): int
+  {
+    return $this->currentRound?->order
+        ?? Round::where('is_active', true)->orderBy('order')->value('order')
+        ?? 0;
   }
 
 //   public function classModel()

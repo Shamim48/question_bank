@@ -274,6 +274,13 @@
                     @csrf
 
                     <div class="card">
+                        <h4>Referral Code (optional)</h4>
+                        <input placeholder="Enter referral code, if any" type="text" name="referral_code"
+                            value="{{ old('referral_code', request('ref')) }}" />
+                        @error('referral_code') <div class="error-text">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="card">
                         <h4>How did you know about us?</h4>
                         <select name="known_from">
                             <option value="">Please Select</option>

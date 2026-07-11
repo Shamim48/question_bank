@@ -1,8 +1,9 @@
 <div class="space-y-8 animate__animated animate__fadeIn">
     @php
         $u = auth()->user();
-        $canEdit   = $u->isAdmin() || $u->hasPermission('participants-edit');
-        $canDelete = $u->isAdmin() || $u->hasPermission('participants-delete');
+        $canEdit    = $u->isAdmin() || $u->hasPermission('participants-edit');
+        $canDelete  = $u->isAdmin() || $u->hasPermission('participants-delete');
+        $canPromote = $u->isAdmin() || $u->hasPermission('participants-promote');
     @endphp
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -18,6 +19,21 @@
         </div>
     </div>
 
+    <!-- Filters -->
+    <div class="glass rounded-3xl p-2">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2">
+            <div class="md:col-span-3">
+                <select wire:model.live="filterRoundId"
+                    class="w-full bg-white/5 border-none rounded-2xl px-4 py-3.5 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/50">
+                    <option value="">All Rounds</option>
+                    @foreach($rounds as $round)
+                        <option value="{{ $round->id }}">{{ $round->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+
     <!-- Content Table -->
     <div class="glass rounded-[2rem] overflow-hidden border border-white/5">
         <table class="w-full text-left border-collapse">
@@ -28,6 +44,7 @@
                     <th class="py-5 px-8 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Class / Group</th>
                     <th class="py-5 px-8 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Institute</th>
                     <th class="py-5 px-8 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Season</th>
+                    <th class="py-5 px-8 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Current Round</th>
                     <th class="py-5 px-8 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Status</th>
                     <th class="py-5 px-8 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] text-right">Actions</th>
                 </tr>
@@ -62,6 +79,11 @@
                             </span>
                         </td>
                         <td class="py-5 px-8">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 text-[10px] font-bold uppercase tracking-wider rounded-lg">
+                                {{ $student->currentRound->name ?? 'Round 1 (default)' }}
+                            </span>
+                        </td>
+                        <td class="py-5 px-8">
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-lg {{ $student->status ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-gray-500/10 border border-gray-500/20 text-gray-400' }}">
                                 {{ $student->status ? 'Active' : 'Inactive' }}
                             </span>
@@ -72,10 +94,23 @@
                                     class="w-9 h-9 glass rounded-lg flex items-center justify-center text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                 </button>
+                                @if($student->banner_path)
+                                    <a href="{{ route('banner.image', $student) }}" download title="Download Banner"
+                                        class="w-9 h-9 glass rounded-lg flex items-center justify-center text-amber-500 hover:bg-amber-500 hover:text-white transition-all">
+                                        <i data-lucide="image-down" class="w-4 h-4"></i>
+                                    </a>
+                                @endif
                                 @if($canEdit)
                                     <button wire:click="edit({{ $student->id }})"
                                         class="w-9 h-9 glass rounded-lg flex items-center justify-center text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all">
                                         <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                    </button>
+                                @endif
+                                @if($canPromote)
+                                    <button wire:click="promote({{ $student->id }})" wire:confirm="Promote {{ $student->name }} to the next round?"
+                                        title="Promote to next round"
+                                        class="w-9 h-9 glass rounded-lg flex items-center justify-center text-emerald-500 hover:bg-emerald-600 hover:text-white transition-all">
+                                        <i data-lucide="arrow-up-circle" class="w-4 h-4"></i>
                                     </button>
                                 @endif
                                 @if($canDelete)
@@ -91,7 +126,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="py-20 text-center">
+                        <td colspan="8" class="py-20 text-center">
                             <i data-lucide="users" class="w-12 h-12 text-gray-700 mx-auto mb-4"></i>
                             <p class="text-gray-500 font-medium">No participants registered yet.</p>
                         </td>

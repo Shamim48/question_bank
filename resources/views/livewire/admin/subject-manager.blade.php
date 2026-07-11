@@ -8,7 +8,7 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h2 class="text-3xl font-display font-bold text-white mb-2">Subject Governance</h2>
+            <h2 class="text-3xl font-display font-bold text-gray-900 mb-2">Subject Governance</h2>
             <p class="text-sm text-gray-400">Map your curriculum to competitive rounds</p>
         </div>
         @if($canCreate)
@@ -45,7 +45,7 @@
                                     <i data-lucide="book-open" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-bold text-white">{{ $subject->name }}</p>
+                                    <p class="text-sm font-bold text-gray-900">{{ $subject->name }}</p>
                                     <p class="text-[10px] text-gray-500 mt-0.5 truncate max-w-[200px]">
                                         {{ $subject->description ?: 'No description provided' }}</p>
                                 </div>
@@ -135,7 +135,7 @@
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Subject
                             Title</label>
                         <input type="text" wire:model="name"
-                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-white"
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-gray-900"
                             placeholder="e.g. Advanced Cryptography">
                         @error('name') <span class="text-red-400 text-[10px]">{{ $message }}</span> @enderror
                     </div>
@@ -144,7 +144,7 @@
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Description
                             (Optional)</label>
                         <textarea wire:model="description" rows="3"
-                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-white"
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-indigo-500/50 text-gray-900"
                             placeholder="Brief overview of this subject focus..."></textarea>
                     </div>
 

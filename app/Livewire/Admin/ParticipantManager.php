@@ -6,6 +6,7 @@ use App\Models\ClassLevel;
 use App\Models\District;
 use App\Models\Division;
 use App\Models\Group;
+use App\Models\Round;
 use App\Models\Season;
 use App\Models\Student;
 use App\Models\Thana;
@@ -19,6 +20,7 @@ class ParticipantManager extends Component
     use WithPagination, WithFileUploads, AuthorizesWriteAction;
 
     public $search = '';
+    public $filterRoundId = '';
     public $viewingId = null;
     public $editingId = null;
 
@@ -100,6 +102,29 @@ class ParticipantManager extends Component
     public function updatingSearch()
     {
         $this->resetPage();
+    }
+
+    public function updatingFilterRoundId()
+    {
+        $this->resetPage();
+    }
+
+    public function promote($id)
+    {
+        if (!$this->requireWrite('participants-promote')) return;
+
+        $student = Student::findOrFail($id);
+        $currentOrder = $student->effectiveRoundOrder();
+
+        $next = Round::where('is_active', true)->where('order', '>', $currentOrder)->orderBy('order')->first();
+
+        if (!$next) {
+            session()->flash('error', $student->name . ' is already at the final round.');
+            return;
+        }
+
+        $student->update(['current_round_id' => $next->id]);
+        session()->flash('success', $student->name . ' promoted to "' . $next->name . '".');
     }
 
     public function view($id)
@@ -225,7 +250,7 @@ class ParticipantManager extends Component
 
     public function render()
     {
-        $query = Student::with(['classLevel', 'group', 'season', 'division', 'district', 'thana']);
+        $query = Student::with(['classLevel', 'group', 'season', 'division', 'district', 'thana', 'currentRound']);
 
         if ($this->search) {
             $query->where(function ($q) {
@@ -236,15 +261,20 @@ class ParticipantManager extends Component
             });
         }
 
+        if ($this->filterRoundId) {
+            $query->where('current_round_id', $this->filterRoundId);
+        }
+
         return view('livewire.admin.participant-manager', [
             'students'       => $query->latest()->paginate(15),
-            'viewingStudent' => $this->viewingId ? Student::with(['classLevel', 'group', 'season', 'division', 'district', 'thana'])->find($this->viewingId) : null,
+            'viewingStudent' => $this->viewingId ? Student::with(['classLevel', 'group', 'season', 'division', 'district', 'thana', 'currentRound'])->find($this->viewingId) : null,
             'classLevels'    => ClassLevel::orderBy('name')->get(),
             'groups'         => Group::orderBy('name')->get(),
             'seasons'        => Season::orderBy('name')->get(),
             'divisions'      => Division::orderBy('name')->get(),
             'districts'      => $this->editDivisionId ? District::where('division_id', $this->editDivisionId)->orderBy('name')->get() : collect(),
             'thanas'         => $this->editDistrictId ? Thana::where('district_id', $this->editDistrictId)->orderBy('name')->get() : collect(),
+            'rounds'         => Round::orderBy('order')->get(),
         ]);
     }
 }

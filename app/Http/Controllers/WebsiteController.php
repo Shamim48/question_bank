@@ -7,11 +7,14 @@ use App\Models\District;
 use App\Models\Division;
 use App\Models\Group;
 use App\Models\Season;
+use App\Models\Commission;
 use App\Models\Role;
+use App\Models\Round;
 use App\Models\Student;
 use App\Models\Team;
 use App\Models\Thana;
 use App\Models\User;
+use App\Support\LoginGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -57,6 +60,7 @@ class WebsiteController extends Controller
             'group_id'       => 'nullable|exists:groups,id',
             'institute_name' => 'nullable|string|max:255',
             'known_from'     => 'nullable|string|max:100',
+            'referral_code'  => 'nullable|string|exists:users,referral_code',
             'password'       => ['required', 'confirmed', Password::min(6)],
         ]);
 
@@ -65,28 +69,44 @@ class WebsiteController extends Controller
 
             $name = trim($request->first_name . ' ' . $request->last_name);
 
+            $referrer = $request->filled('referral_code')
+                ? User::where('referral_code', $request->referral_code)->first()
+                : null;
+
             $user = User::create([
-                'name'     => $name,
-                'email'    => $request->email,
-                'phone'    => $request->phone,
-                'class'    => ClassLevel::find($request->class_id)?->name,
-                'group'    => Group::find($request->group_id)?->name,
-                'password' => Hash::make($request->password),
-                'role'     => 'student',
+                'name'          => $name,
+                'email'         => $request->email,
+                'phone'         => $request->phone,
+                'class'         => ClassLevel::find($request->class_id)?->name,
+                'group'         => Group::find($request->group_id)?->name,
+                'password'      => Hash::make($request->password),
+                'role'          => 'student',
+                'referral_code' => User::generateReferralCode($name),
             ]);
 
-            Student::create([
-                'user_id'        => $user->id,
-                'student_id'     => Student::generateStudentId(),
-                'name'           => $name,
-                'email'          => $request->email,
-                'phone'          => $request->phone,
-                'known_from'     => $request->known_from,
-                'season_id'      => $request->season_id,
-                'class_id'       => $request->class_id,
-                'group_id'       => $request->group_id,
-                'institute_name' => $request->institute_name,
+            $student = Student::create([
+                'user_id'          => $user->id,
+                'student_id'       => Student::generateStudentId(),
+                'name'             => $name,
+                'email'            => $request->email,
+                'phone'            => $request->phone,
+                'known_from'       => $request->known_from,
+                'season_id'        => $request->season_id,
+                'class_id'         => $request->class_id,
+                'group_id'         => $request->group_id,
+                'institute_name'   => $request->institute_name,
+                'current_round_id' => Round::where('is_active', true)->orderBy('order')->value('id'),
+                'referrer_id'      => $referrer?->id,
             ]);
+
+            if ($referrer) {
+                Commission::create([
+                    'referrer_user_id' => $referrer->id,
+                    'student_id'       => $student->id,
+                    'amount'           => Role::where('name', $referrer->role)->value('commission_amount') ?? 0,
+                    'status'           => 'pending',
+                ]);
+            }
 
             DB::commit();
 
@@ -133,11 +153,12 @@ class WebsiteController extends Controller
             $name      = trim($request->first_name . ' ' . $request->last_name);
 
             $user = User::create([
-                'name'     => $name,
-                'email'    => $request->email,
-                'phone'    => $request->phone,
-                'password' => Hash::make($request->password),
-                'role'     => $request->role,
+                'name'          => $name,
+                'email'         => $request->email,
+                'phone'         => $request->phone,
+                'password'      => Hash::make($request->password),
+                'role'          => $request->role,
+                'referral_code' => User::generateReferralCode($name),
             ]);
 
             Team::create([
@@ -202,11 +223,8 @@ class WebsiteController extends Controller
         }
 
         if ($user && Hash::check($password, $user->password)) {
-            // Block pending team members
-            if ($user->isTeam() && !$user->team?->isApproved()) {
-                return back()->withErrors([
-                    'login' => 'Your account is pending admin approval. Please wait.',
-                ])->withInput();
+            if ($error = LoginGuard::check($user)) {
+                return back()->withErrors(['login' => $error])->withInput();
             }
 
             Auth::login($user, $remember);

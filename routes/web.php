@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\SeasonController;
@@ -91,6 +92,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/roles', function () {
         return view('admin.roles');
     })->name('admin.roles');
+
+    Route::get('/settings', function () {
+        return view('admin.settings');
+    })->name('admin.settings');
 });
 
 // Admin OR approved team member routes
@@ -98,6 +103,10 @@ Route::middleware(['auth', 'team.or.admin'])->prefix('admin')->group(function ()
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+
+    Route::get('/exam-dashboard', function () {
+        return view('admin.exam-dashboard');
+    })->name('admin.exam-dashboard');
 
     Route::get('/rounds', function () {
         return view('admin.rounds');
@@ -122,6 +131,14 @@ Route::middleware(['auth', 'team.or.admin'])->prefix('admin')->group(function ()
     Route::get('/participants', function () {
         return view('admin.participants');
     })->name('admin.participants');
+
+    Route::get('/commissions', function () {
+        return view('admin.commissions');
+    })->name('admin.commissions');
+
+    Route::get('/messenger', function () {
+        return view('admin.bulk-messenger');
+    })->name('admin.bulk-messenger');
 
     Route::get('/questions', function () {
         return view('admin.questions');
@@ -191,7 +208,15 @@ Route::middleware(['auth', 'student'])->prefix('student')->group(function () {
     Route::get('/profile', function () {
         return view('student.profile');
     })->name('student.profile');
+
+    Route::get('/banner', function () {
+        return view('student.banner');
+    })->name('student.banner');
 });
+
+// Banner share (public, no auth required)
+Route::get('/banner/{student}/image', [BannerController::class, 'image'])->name('banner.image');
+Route::get('/banner/{student}/share', [BannerController::class, 'share'])->name('banner.share');
 
 // Certificate download (auth required)
 Route::middleware(['auth'])->group(function () {

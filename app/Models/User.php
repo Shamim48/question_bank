@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -15,6 +16,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'referral_code',
         'class',
         'group',
         'phone',
@@ -92,5 +94,21 @@ class User extends Authenticatable
     public function team()
     {
         return $this->hasOne(\App\Models\Team::class, 'user_id');
+    }
+
+    public function commissions()
+    {
+        return $this->hasMany(Commission::class, 'referrer_user_id');
+    }
+
+    public static function generateReferralCode(string $name): string
+    {
+        $base = Str::slug(Str::before($name, ' ')) ?: 'user';
+
+        do {
+            $code = strtoupper($base . '-' . Str::random(4));
+        } while (static::where('referral_code', $code)->exists());
+
+        return $code;
     }
 }

@@ -8,7 +8,7 @@
     <!-- Header Area -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h2 class="text-3xl font-display font-bold text-white mb-2">Competition Rounds</h2>
+            <h2 class="text-3xl font-display font-bold text-gray-900 mb-2">Competition Rounds</h2>
             <p class="text-sm text-gray-400">Orchestrate the progression of your competitive events</p>
         </div>
         @if($canCreate)
@@ -29,7 +29,7 @@
             </div>
             <div class="text-right">
                 <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Total</p>
-                <p class="text-xl font-display font-bold text-white">{{ $rounds->count() }}</p>
+                <p class="text-xl font-display font-bold text-gray-900">{{ $rounds->count() }}</p>
             </div>
         </div>
         <div class="glass flex items-center justify-between p-5 rounded-2xl border-white/5">
@@ -38,7 +38,7 @@
             </div>
             <div class="text-right">
                 <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Active</p>
-                <p class="text-xl font-display font-bold text-white">{{ $rounds->where('is_active', true)->count() }}
+                <p class="text-xl font-display font-bold text-gray-900">{{ $rounds->where('is_active', true)->count() }}
                 </p>
             </div>
         </div>
@@ -48,7 +48,7 @@
             </div>
             <div class="text-right">
                 <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Finals</p>
-                <p class="text-xl font-display font-bold text-white">{{ $rounds->where('is_final', true)->count() }}</p>
+                <p class="text-xl font-display font-bold text-gray-900">{{ $rounds->where('is_final', true)->count() }}</p>
             </div>
         </div>
         <div class="glass flex items-center justify-between p-5 rounded-2xl border-white/5">
@@ -57,7 +57,7 @@
             </div>
             <div class="text-right">
                 <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Upcoming</p>
-                <p class="text-xl font-display font-bold text-white">{{ $rounds->where('is_active', false)->count() }}
+                <p class="text-xl font-display font-bold text-gray-900">{{ $rounds->where('is_active', false)->count() }}
                 </p>
             </div>
         </div>
@@ -89,7 +89,7 @@
                         </td>
                         <td class="py-6 px-8">
                             <div>
-                                <h4 class="text-sm font-bold text-white">{{ $round->name }}</h4>
+                                <h4 class="text-sm font-bold text-gray-900">{{ $round->name }}</h4>
                                 <p class="text-[10px] text-gray-600 mt-1 max-w-[200px] truncate">
                                     {{ $round->description ?: 'No briefing provided.' }}</p>
                             </div>
@@ -164,7 +164,7 @@
                             </div>
                             <h3 class="text-lg font-display font-medium text-gray-500">No organizational rounds found</h3>
                             <button wire:click="openForm"
-                                class="mt-4 text-indigo-400 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">Generate
+                                class="mt-4 text-indigo-400 text-xs font-bold uppercase tracking-widest hover:text-indigo-700 transition-colors">Generate
                                 Initial Round</button>
                         </td>
                     </tr>
@@ -197,7 +197,7 @@
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Round
                                 Designation</label>
                             <input type="text" wire:model="name"
-                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white"
+                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-gray-900"
                                 placeholder="e.g. Preliminary Qualifiers">
                             @error('name') <span class="text-red-400 text-[10px]">{{ $message }}</span> @enderror
                         </div>
@@ -205,7 +205,7 @@
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Sort
                                 Key</label>
                             <input type="number" wire:model="order"
-                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white text-center">
+                                class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-gray-900 text-center">
                         </div>
                     </div>
 
@@ -213,7 +213,7 @@
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Strategic
                             Description</label>
                         <textarea wire:model="description" rows="3"
-                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-white placeholder-gray-600"
+                            class="w-full bg-white border-gray-200 rounded-2xl px-4 py-4 focus:ring-2 focus:ring-indigo-500/50 text-gray-900 placeholder-gray-600"
                             placeholder="Define the rules or scope for participants..."></textarea>
                     </div>
 
